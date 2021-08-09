@@ -16,16 +16,16 @@
 # can be useful for your work.
 #
 # Don't forget to run this from the Duckievillage root directory!
-# From within the root directory, run python with the -m flag.
-#   python3 -m assignments.manual
+# From within the root directory, run python like so:
+#   python3 assignments/manual/manual.py
 #
 # Submission instructions:
 #  0. Add your name and USP number to the header's header.
 #  1. Make sure everything is running fine and there are no errors during startup. If the code does
 #     not even start the environment, you will receive a zero.
 #  2. Test your code and make sure it's doing what it's supposed to do.
-#  3. Append your NUSP to this file name.
-#  4. Submit your work to PACA.
+#  4. Submit your work to edisciplinas.
+#  5. Push changes to your fork. You will also be evaluated from what's in your repository!
 
 import sys
 import pyglet
@@ -33,11 +33,12 @@ import numpy as np
 from pyglet.window import key
 import gym
 import gym_duckietown
-from duckievillage import DuckievillageEnv
+from duckievillage import create_env
 
 # We'll use our version of Duckietown: Duckievillage. This environment will be where we'll run most
 # our tasks in.
-env = DuckievillageEnv(
+env = create_env(
+  raw_motor_input = True,
   seed = 101,
   map_name = 'loop_empty',
   draw_curve = False,
@@ -61,7 +62,7 @@ def on_key_press(symbol, modifiers):
     sys.exit(0)
   env.render()
 
-# KeyStateHandler handles key states. Pretty self-descriptive.
+# KeyStateHandler handles key states.
 key_handler = key.KeyStateHandler()
 # Let's register our key handler to the environment's key listener.
 env.unwrapped.window.push_handlers(key_handler)
