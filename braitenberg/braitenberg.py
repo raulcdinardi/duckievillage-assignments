@@ -1,4 +1,5 @@
-# Intro to Robotics - MAC0318
+# MAC0318 Intro to Robotics
+# Please fill-in the fields below with your info
 #
 # Name:
 # NUSP:
@@ -6,116 +7,141 @@
 # ---
 #
 # Assignment 2 - Braitenberg vehicles
-# Carefully read this header and follow submission instructions!
-# Failure to follow instructions may result in a zero!
 #
 # Task:
-#  - Write the following Braitenberg behaviors by only setting the bot's left and right activation
-#  matrices:
+#  - Implement a reactive agent that implements the "lover" behaviour of Braitenberg's vehicle. 
+# Your agent should approach duckies without reaching too close (and without colliding with them!)
+# This is achieved by modifying the left and right activation matrices and the motor connections
 #
-#     Aggressive: Follows and runs over Duckies;
-#     Coward:     Hides from Duckies;
-#
-# Don't forget to run this from the Duckievillage root directory!
-# From within the root directory, run python like so:
+# Don't forget to run this from the Duckievillage root directory (example):
+#   cd ~/MAC0318/duckievillage
 #   python3 assignments/braitenberg/braitenberg.py
 #
 # Submission instructions:
-#  0. Add your name and USP number to the header's header.
-#  1. Make sure everything is running fine and there are no errors during startup. If the code does
-#     not even start the environment, you will receive a zero.
-#  2. Test your code and make sure it's doing what it's supposed to do.
-#  4. Submit your work to edisciplinas.
-#  3. Push changes to your fork. You will also be evaluated from what's in your repository!
+#  0. Add your name and USP number to the file header above.
+#  1. Make sure that any last change haven't broken your code. If the code chrases without running you'll get a 0.
+#  2. Submit this file via e-disciplinas.
+#  3. Push changes to your git fork.
 
 import sys
-import math
 import pyglet
 import numpy as np
+from typing import Optional, Tuple
 from pyglet.window import key
 import gym
 import gym_duckietown
 from duckievillage import create_env
-from PIL import Image
+import cv2
 
-env = create_env(
-  raw_motor_input = True,
-  seed = 101,
-  map_name = './maps/nothing.yaml',
-  draw_curve = False,
-  draw_bbox = False,
-  domain_rand = False,
-  color_sky = [0, 0, 0],
-  user_tile_start = (0, 0),
-  distortion = False,
-  top_down = False,
-  cam_height = 10,
-  is_external_map = True,
-  enable_lightsensor = True
-)
-for o in env.objects: o.scale = 0.085
 
-# Behavior is passed as an argument.
-behavior = sys.argv[1].lower()
+class Agent:
+    # Agent initialization
+    def __init__(self, environment, key_handler):
+        """ Initializes agent """
+        self.env = environment
+        self.key_handler = key_handler
+        # Color segmentation hyperspace
+        self.lower_hsv = np.array([5, 70, 90])
+        self.upper_hsv = np.array([40, 255, 255])  
+        # Acquire image for initializing activation matrices
+        img = self.env.front()
+        img_shape = img.shape[0], img.shape[1]
+        self.left_motor_matrix = np.zeros(shape=img_shape, dtype="float32")  
+        self.right_motor_matrix = np.zeros(shape=img_shape, dtype="float32")  
+        # TODO! Replace with your code
+        # Each motor activation matrix specifies how much power is given to the respective motor after the image processing routines are applied
+        self.left_motor_matrix[:, :img_shape[1]//2] = 1   # -1 'inhibits' motor, +1 'stimulates' motor
+        self.right_motor_matrix[:, img_shape[1]//2:] = 1  # this implements the aggressive behaviour
 
-angle = env.unwrapped.cam_angle[0]
+    # Image processing routine - Color segmentation
+    def preprocess(self, image: np.ndarray) -> np.ndarray:
+        """ Returns a 2D array mask color segmentation of the image """
+        hsv = cv2.cvtColor(image, cv2.COLOR_RGB2HSV)
+        mask = cv2.inRange(hsv, self.lower_hsv, self.upper_hsv)//255
+        #     masked = cv2.bitwise_and(image, image, mask=mask)
+        return mask
+    
+    def send_commands(self, dt):
+        ''' Agent control loop '''
+        # acquire front camera image
+        img = self.env.front()
+        # run image processing routines
+        P = self.preprocess(img)
+        # build left and right signals
+        L = float(np.sum(P * self.left_motor_matrix))
+        R = float(np.sum(P * self.right_motor_matrix))
+        limit = img.shape[0]*img.shape[1]
+        # These are big numbers, thus rescale them to unit interval
+        L = rescale(L, 0, limit)
+        R = rescale(R, 0, limit)
+        # Tweak with the constants below to get to change velocity or stabilize movemente
+        # Recall that pwm sets wheel torque, and is capped to be in [-1,1]
+        gain = 5.0
+        const = 0.2 # power under null activation - this ensures the robot does not halt
+        pwm_left = const + R * gain
+        pwm_right = const + L * gain
+        # print('>', L, R, pwm_left, pwm_right) # uncomment for debugging
+        # Now send command
+        self.env.step(np.array([pwm_left, pwm_right]))
+        self.env.render()
 
-env.start_pose = [np.array([0.5, 0, 0.5]), 150]
-env.reset()
-env.render()
 
-@env.unwrapped.window.event
-def on_key_press(symbol, modifiers):
-  if symbol == key.ESCAPE:
+def rescale(x: float, L: float, U: float):
+    ''' Map scalar x in interval [L, U] to interval [0, 1]. '''
+    return (x - L) / (U - L)
+
+
+def main():
+    print("MAC0318 - Assignment 2")
+    env = create_env(
+      raw_motor_input = True,
+      seed = 101,
+      map_name = './maps/nothing.yaml',
+      draw_curve = False,
+      draw_bbox = False,
+      domain_rand = False,
+      #color_sky = [0, 0, 0],
+      user_tile_start = (0, 0),
+      distortion = False,
+      top_down = False,
+      cam_height = 10,
+      is_external_map = True,
+      enable_lightsensor = False
+    )
+    for o in env.objects: o.scale = 0.085
+
+    angle = env.unwrapped.cam_angle[0]
+
+    env.start_pose = [np.array([0.5, 0, 0.5]), 150]
+
+    env.reset()
+    env.render()
+
+    @env.unwrapped.window.event
+    def on_key_press(symbol, modifiers):
+        if symbol == key.ESCAPE: # exit simulation
+            env.close()
+            sys.exit(0)
+        elif symbol == key.BACKSPACE or symbol == key.SLASH: # reset simulation
+            print("RESET")
+            env.reset()
+        elif symbol == key.RETURN:  # Take a screenshot
+            print('saving screenshot')
+            img = env.render('rgb_array')
+            cv2.imwrite(f'screenshot-{env.unwrapped.step_count}.png', cv2.cvtColor(img, cv2.COLOR_RGB2BGR))
+        env.render()
+
+    # KeyStateHandler handles key states.
+    key_handler = key.KeyStateHandler()
+    # Let's register our key handler to the environment's key listener.
+    env.unwrapped.window.push_handlers(key_handler)            
+    # Instantiante agent
+    agent = Agent(env, key_handler)
+    # Call send_commands function from periodically (to simulate processing latency)
+    pyglet.clock.schedule_interval(agent.send_commands, 1.0 / env.unwrapped.frame_rate)
+    # Now run simulation forever (or until ESC is pressed)
+    pyglet.app.run()
     env.close()
-    sys.exit(0)
-  env.render()
 
-# KeyStateHandler handles key states.
-key_handler = key.KeyStateHandler()
-# Let's register our key handler to the environment's key listener.
-env.unwrapped.window.push_handlers(key_handler)
-
-# The left motor activation matrix. The returned matrix will define how much power is given to the
-# left motor.
-def left_activation(n: int, m: int) -> np.ndarray:
-  M = np.zeros(shape=(n, m), dtype=np.float32)
-  if behavior == "aggressive":
-    pass
-  else: # coward
-    pass
-  return M
-
-# The right motor activation matrix. The returned matrix will define how much power is given to the
-# right motor.
-def right_activation(n: int, m: int) -> np.ndarray:
-  M = np.zeros(shape=(n, m), dtype=np.float32)
-  if behavior == "aggressive":
-    pass
-  else: # coward
-    pass
-  return M
-
-def update(dt):
-  action = [0.0, 0.0]
-
-  action[0], action[1] = env.lightsensor.measure(left_activation, right_activation)
-  # If needed, tweak power with constants of your choice.
-  action[0] /= 2
-  action[1] /= 2
-
-  if key_handler[key.W]:
-    action += np.array([0.5, 0.5])
-  if key_handler[key.A]:
-    action += np.array([-0.5, 0.5])
-  if key_handler[key.S]:
-    action += np.array([-0.5, -0.5])
-  if key_handler[key.D]:
-    action += np.array([0.5, -0.5])
-
-  obs, reward, done, info = env.step(action)
-  env.render()
-
-pyglet.clock.schedule_interval(update, 1.0 / env.unwrapped.frame_rate)
-pyglet.app.run()
-env.close()
+if __name__ == '__main__':
+    main()
