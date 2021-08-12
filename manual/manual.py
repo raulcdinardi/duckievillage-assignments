@@ -1,42 +1,32 @@
-# Intro to Robotics - MAC0318
+# MAC0318 Intro to Robotics
+# Please fill-in the fields below with your info
 #
 # Name:
 # NUSP:
 #
 # ---
 #
-# Assignment 1 - Manual steering
-# Carefully read this header and follow submission instructions!
-# Failure to follow instructions may result in a zero!
+# Assignment 0 - Manual steering
 #
 # Task:
-#  - Create a remote control Duckiebot.
+#  - Write a remote control Duckiebot
 #
-# Don't forget that you can (and should!) read the Duckievillage code in search of anything that
-# can be useful for your work.
-#
-# Don't forget to run this from the Duckievillage root directory!
-# From within the root directory, run python like so:
+# Don't forget to run this from the Duckievillage root directory (example):
+#   cd ~/MAC0318/duckievillage
 #   python3 assignments/manual/manual.py
 #
 # Submission instructions:
-#  0. Add your name and USP number to the header's header.
-#  1. Make sure everything is running fine and there are no errors during startup. If the code does
-#     not even start the environment, you will receive a zero.
-#  2. Test your code and make sure it's doing what it's supposed to do.
-#  4. Submit your work to edisciplinas.
-#  5. Push changes to your fork. You will also be evaluated from what's in your repository!
+#  0. Add your name and USP number to the file header above.
+#  1. Make sure that any last change haven't broken your code. If the code chrases without running you'll get a 0.
+#  2. Submit this file via e-disciplinas.
+#  3. Push changes to your git fork.import sys
 
-import sys
 import pyglet
-import numpy as np
 from pyglet.window import key
-import gym
-import gym_duckietown
 from duckievillage import create_env
 
 # We'll use our version of Duckietown: Duckievillage. This environment will be where we'll run most
-# our tasks in.
+# our tasks.
 env = create_env(
   raw_motor_input = True,
   seed = 101,
@@ -70,10 +60,10 @@ env.unwrapped.window.push_handlers(key_handler)
 # This function handles every frame update. Parameter dt is the elapsed time, in milliseconds,
 # since the last update call.
 def update(dt):
-  # At each step, the agent accepts an action array (also accepts numpy.arrays):
-  #   action = [forward_velocity, steering_angle]
+  # At each step, the agent accepts an action in the form of two [-1,1] reals:
+  #   pwm_left, pwm_right = left motor power, right motor power
   # Play with the actions and figure out how to make your own remote control duckiebot!
-  action = np.array([0.0, 0.0])
+  pwm_left, pwm_right = 0, 0
 
   # The key_handler object handles keyboard events. It's basically a map indexed by Pyglet keys
   # with values True if the key is being held, or False otherwise.
@@ -87,11 +77,11 @@ def update(dt):
     print('K!')
 
   # At each step, the environment may (or may not) change given your actions. Function step takes
-  # as parameter the array action and returns an observation (what the robot is currently
-  # seeing), a reward (mostly used for reinforcement learning), whether the episode is done (also
-  # used for reinforcement learning) and some info on the elapsed episode.
-  # Let's ignore return values for now.
-  obs, reward, done, info = env.step(action)
+  # as parameter the two motor powers as action and returns an observation (what the robot is
+  # currently seeing), a reward (mostly used for reinforcement learning), whether the episode is
+  # done (also used for reinforcement learning) and some info on the elapsed episode.  Let's ignore
+  # return values for now.
+  obs, reward, done, info = env.step(pwm_left, pwm_right)
 
   # Refresh at every update.
   env.render()
