@@ -83,7 +83,7 @@ class Agent:
         # print('>', L, R, pwm_left, pwm_right) # uncomment for debugging
         # Now send command
         self.env.step(np.array([pwm_left, pwm_right]))
-        self.env.render()
+        self.env.render('human')
 
 
 def rescale(x: float, L: float, U: float):
@@ -112,10 +112,10 @@ def main():
 
     angle = env.unwrapped.cam_angle[0]
 
-    env.start_pose = [np.array([0.5, 0, 0.5]), 150]
-
+    env.start_pose = [[0.5, 0, 0.5], 150]
     env.reset()
-    env.render()
+    env.render('human')
+
 
     @env.unwrapped.window.event
     def on_key_press(symbol, modifiers):
