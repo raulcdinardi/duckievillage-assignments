@@ -9,7 +9,7 @@
 # Assignment 2 - Braitenberg vehicles
 #
 # Task:
-#  - Implement a reactive agent that implements the "lover" behaviour of Braitenberg's vehicle. 
+#  - Implement a reactive agent that implements the "lover" behaviour of Braitenberg's vehicle.
 # Your agent should approach duckies without reaching too close (and without colliding with them!)
 # This is achieved by modifying the left and right activation matrices and the motor connections
 #
@@ -26,28 +26,23 @@
 import sys
 import pyglet
 import numpy as np
-from typing import Optional, Tuple
 from pyglet.window import key
-import gym
-import gym_duckietown
 from duckievillage import create_env
 import cv2
 
-
 class Agent:
     # Agent initialization
-    def __init__(self, environment, key_handler):
+    def __init__(self, environment):
         """ Initializes agent """
         self.env = environment
-        self.key_handler = key_handler
         # Color segmentation hyperspace
         self.lower_hsv = np.array([5, 70, 90])
-        self.upper_hsv = np.array([40, 255, 255])  
+        self.upper_hsv = np.array([40, 255, 255])
         # Acquire image for initializing activation matrices
         img = self.env.front()
         img_shape = img.shape[0], img.shape[1]
-        self.left_motor_matrix = np.zeros(shape=img_shape, dtype="float32")  
-        self.right_motor_matrix = np.zeros(shape=img_shape, dtype="float32")  
+        self.left_motor_matrix = np.zeros(shape=img_shape, dtype="float32")
+        self.right_motor_matrix = np.zeros(shape=img_shape, dtype="float32")
         # TODO! Replace with your code
         # Each motor activation matrix specifies how much power is given to the respective motor after the image processing routines are applied
         self.left_motor_matrix[:, :img_shape[1]//2] = 1   # -1 'inhibits' motor, +1 'stimulates' motor
@@ -60,7 +55,7 @@ class Agent:
         mask = cv2.inRange(hsv, self.lower_hsv, self.upper_hsv)//255
         #     masked = cv2.bitwise_and(image, image, mask=mask)
         return mask
-    
+
     def send_commands(self, dt):
         ''' Agent control loop '''
         # acquire front camera image
@@ -82,7 +77,7 @@ class Agent:
         pwm_right = const + L * gain
         # print('>', L, R, pwm_left, pwm_right) # uncomment for debugging
         # Now send command
-        self.env.step(np.array([pwm_left, pwm_right]))
+        self.env.step(pwm_left, pwm_right)
         self.env.render('human')
 
 
@@ -116,7 +111,6 @@ def main():
     env.reset()
     env.render('human')
 
-
     @env.unwrapped.window.event
     def on_key_press(symbol, modifiers):
         if symbol == key.ESCAPE: # exit simulation
@@ -131,12 +125,8 @@ def main():
             cv2.imwrite(f'screenshot-{env.unwrapped.step_count}.png', cv2.cvtColor(img, cv2.COLOR_RGB2BGR))
         env.render()
 
-    # KeyStateHandler handles key states.
-    key_handler = key.KeyStateHandler()
-    # Let's register our key handler to the environment's key listener.
-    env.unwrapped.window.push_handlers(key_handler)            
     # Instantiante agent
-    agent = Agent(env, key_handler)
+    agent = Agent(env)
     # Call send_commands function from periodically (to simulate processing latency)
     pyglet.clock.schedule_interval(agent.send_commands, 1.0 / env.unwrapped.frame_rate)
     # Now run simulation forever (or until ESC is pressed)
