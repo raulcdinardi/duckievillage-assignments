@@ -22,6 +22,7 @@
 #  2. Submit this file via e-disciplinas.
 #  3. Push changes to your git fork.import sys
 
+import sys
 import pyglet
 from pyglet.window import key
 from duckievillage import create_env
