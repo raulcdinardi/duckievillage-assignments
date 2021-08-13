@@ -69,7 +69,7 @@ class Agent:
         # These are big numbers, thus rescale them to unit interval
         L = rescale(L, 0, limit)
         R = rescale(R, 0, limit)
-        # Tweak with the constants below to get to change velocity or stabilize movemente
+        # Tweak with the constants below to get to change velocity or stabilize movements
         # Recall that pwm sets wheel torque, and is capped to be in [-1,1]
         gain = 5.0
         const = 0.2 # power under null activation - this ensures the robot does not halt
@@ -87,7 +87,7 @@ def rescale(x: float, L: float, U: float):
 
 
 def main():
-    print("MAC0318 - Assignment 2")
+    print("MAC0318 - Assignment 1")
     env = create_env(
       raw_motor_input = True,
       seed = 101,
@@ -125,7 +125,7 @@ def main():
             cv2.imwrite(f'screenshot-{env.unwrapped.step_count}.png', cv2.cvtColor(img, cv2.COLOR_RGB2BGR))
         env.render()
 
-    # Instantiante agent
+    # Instantiate agent
     agent = Agent(env)
     # Call send_commands function from periodically (to simulate processing latency)
     pyglet.clock.schedule_interval(agent.send_commands, 1.0 / env.unwrapped.frame_rate)

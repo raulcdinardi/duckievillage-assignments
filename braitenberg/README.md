@@ -71,8 +71,7 @@ implementar diferentes comportamentos.
 
 ## Implementando a tarefa
 
-Sua tarefa nesta atividade é construir o comportamento "lover" em `braitenberg.py` alterando apenas
-as matrizes de ativação e conexões com os motores.
-
-As matrizes de ativação estão definidas no construtor da classe `Agent`, enquanto que a conexão com
-os motores é feita no método `Agent.send_commands`.
+Sua tarefa nesta atividade é construir o comportamento "lover" em `braitenberg.py` alterando as
+matrizes de ativação, conexões com os motores ou implementando decisões a partir da máscara. As
+matrizes de ativação estão definidas no construtor da classe `Agent`, enquanto que a conexão com os
+motores é feita no método `Agent.send_commands`.
