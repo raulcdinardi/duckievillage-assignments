@@ -5,7 +5,7 @@ arquivo `braitenberg.py` atualmente implementa o comportamento agressivo. Nesta 
 implementar o comportamento "lover":
 
 > O veículo de comportamento **lover** deve se aproximar da fonte atratora e manter-se a uma curta
-> distância da mesma.
+> distância dela sem se chocar-se com ela.
 
 Aqui, vamos assumir que as fontes atratoras são patos.
 
