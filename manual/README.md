@@ -1,20 +1,24 @@
-# Atividade 0 - Direção manual
+# Atividade 1 - Direção manual
 
-Nesta atividade, apresentaremos o básico do ambiente que usaremos durante a disciplina. Vamos usar
-uma versão modificada do simulador [Duckietown](https://github.com/duckietown/gym-duckietown/), que
-chamaremos de [Duckievillage](https://gitlab.uspdigital.usp.br/mac0318-2021/duckievillage). Como
-uma tarefa introdutória, vamos construir um carrinho de controle remoto no Duckievillage.
+Nesta atividade, apresentaremos o básico do ambiente de simulação de robôs autônomos que usaremos durante a disciplina. 
+Vamos usar uma versão modificada do simulador [Duckietown](https://github.com/duckietown/gym-duckietown/), que
+chamaremos de [Duckievillage](https://gitlab.uspdigital.usp.br/mac0318-2021/duckievillage). 
+Para familiarizar-se com a estrutura de um agente do simulador, você deverá construir um sistema de controle manual do robô a partir das teclas do seu teclado.
 
-Para rodar a atividade, você deve ter instalado o Duckievillage (preferencialmente pelo script
-`install.sh`). Não se esqueça de ativar o ambiente do Anaconda:
+## Pré-requisito
+
+Vamos assumir que você instalou o simulador e clonou o projeto de atividades executando o arquivo [install.sh](../../install.sh) do projeto [Duckievillage](https://gitlab.uspdigital.usp.br/mac0318-2021/duckievillage). Antes de cada atividade, lembre-se de ativar o ambiente do Anaconda:
 
 ```bash
 conda activate duckietown
 ```
 
-O arquivo `manual.py` deve conter o código que deve ser entregue pelo e-disciplinas, assim como seu
-nome e número USP no cabeçalho. Para esta primeira tarefa, primeiro vamos incluir as bibliotecas
-que usaremos.
+## Controle manual
+
+O arquivo [manual.py](./manual.py) contém um código mínimo criando um ambiente de simulação e um agente móvel. 
+Antes de continuar, preencha o cabeçalho do arquivo com seu nome e número USP (para que possamos identificar corretamente sua submissão no e-disciplinas).
+
+O arquivo importa as seguintes bibliotecas.
 
 ```python
 import sys
@@ -23,10 +27,9 @@ from pyglet.window import key
 from duckievillage import create_env
 ```
 
-Usaremos o [pyglet](http://pyglet.org/) para lidar com o input, como teclado ou mouse; e para lidar
-com a parte gráfica. Por parte do simulador, vamos usar a função `create_env`, que constrói o
-ambiente de simulação que usaremos durante o curso. Esta função retorna o simulador, que
-guardaremos na variável `env`.
+A biblioteca [pyglet](http://pyglet.org/) serve para tratar as entradas do teclado, e a temporização da simulação. 
+A biblioteca `duckievillage` contém o simulador; vamos usar a função `create_env`, que constrói o
+ambiente de simulação que usaremos durante o curso. Esta função retorna uma instanciação do simulador na variável `env`:
 
 ```python
 env = create_env(
@@ -34,8 +37,9 @@ env = create_env(
 )
 ```
 
-O arquivo `manual.py` comenta com mais detalhes o que cada trecho de código faz. A parte mais
-importante da tarefa é a função `update`. Vamos implementar o comportamento do robô a partir desta
+O arquivo [manual.py](./manual.py) é comentado com os detalhes sobre o restante das operações necessárias para inciar o simulador. 
+Você pode inspecionar o código, mas não será necessário entender o funcionamenteo do simulador para as atividades da disciplina (vamos focar apenas no funcionamento do robô). 
+O comportamento do robô é implementado na função `update`. Vamos implementar o comportamento do robô a partir desta
 função. Em particular, note a subrotina `env.step`: ela é encarregada de tomar uma ação do robô, e
 aplicar suas consequências no ambiente (de simulação). Esta função toma como argumentos dois
 números reais no intervalo $`[-1,1]`$: a potência no motor esquerdo e direito no robô
