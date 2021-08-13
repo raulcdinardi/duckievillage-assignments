@@ -6,7 +6,7 @@
 #
 # ---
 #
-# Assignment 2 - Braitenberg vehicles
+# Assignment 1 - Braitenberg vehicles
 #
 # Task:
 #  - Implement a reactive agent that implements the "lover" behaviour of Braitenberg's vehicle.
