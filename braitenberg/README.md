@@ -46,9 +46,7 @@ Seja $`A\in\mathbb{R}^{m\times n}`$ a matriz de ativação de um certo motor. A 
 motor $p$ é definida por:
 
 ```math
-\begin{align*}
-  p=c+g\cdot\frac{\sum_{i=1}^n\sum_{j=1}^m A_{ij}\cdot M_{ij}}{z},
-\end{align*}
+p=c+g\cdot\frac{\sum_{i=1}^n\sum_{j=1}^m A_{ij}\cdot M_{ij}}{z},
 ```
 
 onde $`c`$ é uma constante para manter o robô sempre se movendo, $`g`$ é uma constante para
@@ -57,11 +55,17 @@ que o numerador não cresça demais.
 
 Podemos dividir tanto a máscara quanto as matrizes de ativação para que os motores tenham
 comportamentos distintos para regiões distintas da câmera. Uma abordagem simples é definir duas
-máscaras como as submatrizes $`M_E=M[1,\ldots,\lfloor\frac{n}{2}\rfloor;1,\ldots,m]`$ e
-$`M_D=M[\lfloor\frac{n}{2}+1\rfloor, \ldots,n;1,\ldots,m]`$, ou seja, as metades esquerda e direita
-da imagem original. As matrizes de ativação $`E`$ e $`D`$ dos motores esquerdo e direito (cujas
-dimensões são as mesmas que $`M_E`$ e $`M_D`$ respectivamente) possibilitam comportamentos
-diferentes para cada motor.
+máscaras como as submatrizes
+
+```math
+\begin{align}
+  &M_E=M[1,\ldots,\lfloor\frac{n}{2}\rfloor;1,\ldots,m] e\\
+  &M_D=M[\lfloor\frac{n}{2}+1\rfloor, \ldots,n;1,\ldots,m],
+\end{align}
+```
+ou seja, as metades esquerda e direita da imagem original. As matrizes de ativação $`E`$ e $`D`$
+dos motores esquerdo e direito (cujas dimensões são as mesmas que $`M_E`$ e $`M_D`$
+respectivamente) possibilitam comportamentos diferentes para cada motor.
 
 Note que as matrizes de ativação são equivalentes aos sensores de luz no problema clássico dos
 veículos de Braitenberg. De forma parecida, podemos também mudar as conexões dos sensores para
