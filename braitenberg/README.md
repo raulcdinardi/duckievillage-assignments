@@ -68,5 +68,6 @@ implementar diferentes comportamentos.
 
 Sua tarefa nesta atividade é modificar o arquivo [braitenberg.py](./braitenberg.py) para implementar o comportamento enamorado alterando as
 matrizes de conexões, e valores das constantes e do filtro de cor. As matrizes de conexão são definidas no construtor da classe `Agent`, o filtro é implementado no método `process` e as constantes de controle são definidas no método `send_commands`.
+Submeta sua solução (o arquivo [braitenberg.py](./braitenberg.py)) via e-disciplinas.
 
 
