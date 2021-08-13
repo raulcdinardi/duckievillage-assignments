@@ -6,12 +6,13 @@
 #
 # ---
 #
-# Assignment 0 - Manual steering
+# Assignment 1 - Manual steering
 #
 # Task:
 #  - Write a remote control Duckiebot
 #
 # Don't forget to run this from the Duckievillage root directory (example):
+#   conda activate duckietown
 #   cd ~/MAC0318/duckievillage
 #   python3 assignments/manual/manual.py
 #
@@ -38,11 +39,11 @@ class Agent:
 
     def send_commands(self, dt):
         ''' Agent control loop '''
-        # This function handles every frame update. Parameter dt is the elapsed time, in
+        # This function updates the robot behaviour. Parameter dt is the elapsed time, in
         # milliseconds, since the last update call.
-        # At each step, the agent accepts an action in the form of two [-1,1] reals:
+        # At each step, the agent produces an action in the form of two reals in [-1,1]:
         #   pwm_left, pwm_right = left motor power, right motor power
-        # Play with the actions and figure out how to make your own remote control duckiebot!
+        # Play with these values and figure out how to make your own remote control duckiebot!
         pwm_left, pwm_right = 0, 0
 
         # The key_handler object handles keyboard events. It's basically a map indexed by Pyglet
@@ -67,7 +68,7 @@ class Agent:
         self.env.render()
 
 def main():
-    print("MAC0318 - Assignment 0")
+    print("MAC0318 - Assignment 1")
     # We'll use our version of Duckietown: Duckievillage. This environment will be where we'll run most
     # our tasks.
     env = create_env(
