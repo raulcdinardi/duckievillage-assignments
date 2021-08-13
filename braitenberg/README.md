@@ -1,69 +1,64 @@
 # Atividade 1 - Veículos de Braitenberg
 
-Para a Atividade 1, vamos implementar os veículos de Braitenberg no simulador Duckievillage. O
-arquivo `braitenberg.py` atualmente implementa o comportamento agressivo. Nesta tarefa, você deve
-implementar o comportamento "lover":
+Nessa atividade você deve implementar um veículo de Braitenberg no simulador Duckievillage assumindo que as fontes atratoras são patos, como na figura abaixo.
 
-> O veículo de comportamento **lover** deve se aproximar da fonte atratora e manter-se a uma curta
-> distância dela sem se chocar-se com ela.
+<figure>
+  <div style="text-align: center">
+  <img src="img/sim3.png" alt="Patos!" width="300">
+  </div>
+</figure>
 
-Aqui, vamos assumir que as fontes atratoras são patos.
+O arquivo [braitenberg.py](./braitenberg.py) contém um código inicial implementando o comportamento agressivo. 
+Sua tarefa é modificar o código para implementar o comportamento "enamorado" (_lover_):
 
-![Patos!](img/manyduckies.jpg "Patos!")
+> O veículo de comportamento enamorado se aproxima da fonte, mantendo-se a uma curta
+> distância dela e evitando colisão com ela.
 
-O robô (simulado) que iremos usar neste curso possue como *input* uma única câmera frontal e dois
+O robô simulado que iremos usar neste curso possui como *sensor* uma única câmera frontal e como *atuadores* dois
 motores para cada uma das duas rodas traseiras.
 
-![Duckiebot](img/duckiebot.jpg "Duckiebot")
+<figure>
+  <div style="text-align: center">
+  <img src="img/duckiebot.jpg" alt="Duckiebot" width="300">
+  </div>
+</figure>
 
-Este tipo de input é mais flexível que o sensor de luz no problema clássico dos veículos de
-Braitenberg. Ao invés de detectarmos apenas a luminosidade, podemos também detectar cor ou até
-mesmo objetos ou pessoas. Para a Atividade 1, vamos usar cor para detectar os patinhos.
+Note que uma câmera digital é apenas uma coleção de sensores de luz organizados matricialmente.
+Dessa forma, o veículo de Braitenberg a ser desenvolvido conecta cada ponto da imagem (pixel) aos motores.
+Dada a forma matricial da imagem, vamos representar as conexões entre sensores e atuadores também como uma matriz.
+Para esta atividade, vamos usar processar as imagens capturadas para produzir um sensor de patos 
+(ou mais especificamente, da cor amarela).
 
-## Filtragem por cor
+## Sensor de cor
 
-Para detectarmos os patinhos, precisamos fazer uma filtragem da imagem original em busca de pixels
-cuja cor é igual (ou pelo menos parecida) com a dos patos. O notebook `filtro.ipynb` mostra como
-construir um filtro de cor.
-
-## Potência dos motores
-
-A partir deste filtro, construímos uma máscara na forma de uma matriz $`M\in\{0,1\}^{m\times n}`$
-
+Para detectarmos os patos, vamos implementar um filtro de pontos da imagem pela cor (tal processamento é conhecida como _segmentação de imagem por cores_). O arquivo [filtro.ipynb](./filtro.ipynb) contém um _notebook_ do jupyter descrevendo como construir um filtro de segmentação por cores.
+O resultado do filtro é uma matriz $`M\in\{0,1\}^{m\times n}`$ de máscara tal que
 ```math
 M_{ij}=\begin{cases}
-  1&\text{ se o pixel }(i,j)\text{ é da cor dos patinhos,}\\
-  0&\text{ caso contrário;}
+  1&\text{ se o pixel }(i,j)\text{ é da cor dos patos,}\\
+  0&\text{ caso contrário.}
 \end{cases}
 ```
+Os valores $`m`$ e $`n`$ definem a largura e altura das imagens capturadas pela câmera do robô.
 
-onde $`m`$ e $`n`$ definem a largura e altura das imagens recuperadas pela câmera do robô.
-Usaremos esta máscara no simulador para detectar a presença de patinhos na câmera frontal do
-Duckiebot e reagir conforme. Mais especificamente, vamos definir o comportamento dos robôzinhos a
-partir de uma *matriz de ativação*.
+## Conexões com os motores
 
-Seja $`A\in\mathbb{R}^{m\times n}`$ a matriz de ativação de um certo motor. A potência dada a este
-motor $p$ é definida por:
+A arquitetura de um veículo de Braitenberg consiste em conectar diretamente os sensores aos atuadores.
+Faremos isso definindo as matrizes de pesos de conexão $`E\in\mathbb{R}^{m \times n}`$ e $`D \in \mathbb{R}^{m \times n}`$.
+Inspecione o arquivo [braitenberg.py](./braitenberg.py) e note como as matrizes são definidas para o caso simples do comportamento agressivo como matrizes binárias segmentando a imagem em partes esquerda e direita.
 
-```math
-p=c+g\cdot\frac{\sum_{i=1}^n\sum_{j=1}^m A_{ij}\cdot M_{ij}}{z},
-```
+## Ativação
 
-onde $`c`$ é uma constante para manter o robô sempre se movendo, $`g`$ é uma constante para
-controlar a velocidade ou estabilizar os movimentos, e $`z`$ é uma constante de normalização para
-que o numerador não cresça demais.
-
-Podemos dividir tanto a máscara quanto as matrizes de ativação para que os motores tenham
-comportamentos distintos para regiões distintas da câmera. Uma abordagem simples é definir duas
-máscaras como as submatrizes
+Tanto o comportamento agressivo como o comportamento enamorado podem ser implementados usando uma relação de ativição linear entre os sensores e os motores:
 
 ```math
-  M_E=M\left[1,\ldots,\lfloor\frac{n}{2}\rfloor;1,\ldots,m\right]\text{ e}\\
-  M_D=M\left[\lfloor\frac{n}{2}\rfloor+1, \ldots,n;1,\ldots,m\right],
+p_e = c + g \cdot \sigma\left( \cdot \sum_{i=1}^n\sum_{j=1}^m E_{ij}\cdot M_{ij} \right),
 ```
-ou seja, as metades esquerda e direita da imagem original. As matrizes de ativação $`E`$ e $`D`$
-dos motores esquerdo e direito (cujas dimensões são as mesmas que $`M_E`$ e $`M_D`$
-respectivamente) possibilitam comportamentos diferentes para cada motor.
+```math
+p_d = c + g \cdot \sigma\left( \sum_{i=1}^n\sum_{j=1}^m D_{ij}\cdot M_{ij} \right) .
+```
+
+Nas equações acima, $`p_e`$ e $`p_d`$ são os sinais enviados aos motores regulando a tensão elétrica (no intervalo $[-1,1]$), $`c`$ é uma constante que mantêm o robô sempre se movendo (pense como ativação mínima na ausência de estímulo), $`g`$ é uma constante de ganho que amplifica (ou atenua) os estímulos a fim de controlar a velocidade ou estabilizar o movimento, $`\sigma`$ é um função que mapeia um real no intervalo $[0,1]$, $`M`$ é a máscara obtida pelo filtro de cores e $`z`$ é uma constante de normalização para que o numerador não cresça demais.
 
 Note que as matrizes de ativação são equivalentes aos sensores de luz no problema clássico dos
 veículos de Braitenberg. De forma parecida, podemos também mudar as conexões dos sensores para
@@ -71,7 +66,7 @@ implementar diferentes comportamentos.
 
 ## Implementando a tarefa
 
-Sua tarefa nesta atividade é construir o comportamento "lover" em `braitenberg.py` alterando as
-matrizes de ativação, conexões com os motores ou implementando decisões a partir da máscara. As
-matrizes de ativação estão definidas no construtor da classe `Agent`, enquanto que a conexão com os
-motores é feita no método `Agent.send_commands`.
+Sua tarefa nesta atividade é modificar o arquivo [braitenberg.py](./braitenberg.py) para implementar o comportamento enamorado alterando as
+matrizes de conexões, e valores das constantes e do filtro de cor. As matrizes de conexão são definidas no construtor da classe `Agent`, o filtro é implementado no método `process` e as constantes de controle são definidas no método `send_commands`.
+
+
