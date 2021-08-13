@@ -1,4 +1,4 @@
-# Atividade 1 - Veículos de Braitenberg
+# Atividade 2 - Veículos de Braitenberg
 
 Nessa atividade você deve implementar um veículo de Braitenberg no simulador Duckievillage assumindo que as fontes atratoras são patos, como na figura abaixo.
 
