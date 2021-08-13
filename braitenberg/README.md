@@ -58,8 +58,8 @@ comportamentos distintos para regiões distintas da câmera. Uma abordagem simpl
 máscaras como as submatrizes
 
 ```math
-  M_E=M[1,\ldots,\lfloor\frac{n}{2}\rfloor;1,\ldots,m]\text{ e}\\
-  M_D=M[\lfloor\frac{n}{2}+1\rfloor, \ldots,n;1,\ldots,m],
+  M_E=M\left[1,\ldots,\lfloor\frac{n}{2}\rfloor;1,\ldots,m\right]\text{ e}\\
+  M_D=M\left[\lfloor\frac{n}{2}\rfloor+1, \ldots,n;1,\ldots,m\right],
 ```
 ou seja, as metades esquerda e direita da imagem original. As matrizes de ativação $`E`$ e $`D`$
 dos motores esquerdo e direito (cujas dimensões são as mesmas que $`M_E`$ e $`M_D`$
