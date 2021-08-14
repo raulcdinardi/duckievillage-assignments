@@ -60,5 +60,6 @@ outer_right_motor_matrix : np.ndarray
 
 que definem o comportamento do motor esquerdo e direito para as máscaras LFO e LBO. Faça os ajustes
 necessários das constantes regularizadoras no método `Agent.send_commands`. O comportamento
-desejado é uma reação *enamorado* para cada uma das faixas.
+desejado é uma reação *enamorado* para cada uma das faixas. Submeta sua solução (o arquivo
+`lane_following.py`) via e-disciplinas.
 
