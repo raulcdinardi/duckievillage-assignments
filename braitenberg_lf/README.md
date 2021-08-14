@@ -1,12 +1,11 @@
-# Atividade 3 - Braitenberg Seguidor de Pista
+# Atividade 3 - Veículo de Braitenberg com comportamento seguidor de pista 
 
-Para esta atividade, vamos implementar um caso de uso mais realista para os veículos de
-Braitenberg. Sua tarefa é conduzir um robô por uma pista contendo demarcações usuais de trânsito.
+Nesta atividade você deve implementar um caso de uso mais realista para os veículos de
+Braitenberg. Sua tarefa aqui será construir um robô que se segue a faixa correta na pista no mundo simulado do duckietown (que possui um grau de padronização e homogeneidade longe das condições de trânsito de uma cidade real).
 
-Para tanto, precisamos construir dois filtros: um para a demarcação de Linha de Fluxo Oposto (LFO),
-que consiste na linha amarela tracejada; e outra para a Linha de Bordo (LBO), que aqui é definida
-por uma linha branca contígua. A figura abaixo mostra a pista, demarcações da pista, e filtros para
-cada demarcações internas e externas.
+Para tanto, você deve pré-processar a imagem capturada pela câmera para identificar a Linha de Fluxo Oposto (LFO),
+que consiste na linha amarela tracejada, e a Linha de Bordo (LBO), definida pela linha branca contígua. 
+A figura abaixo mostra a visão do robô do mundo simulado (ou seja, a imagem capturada pela câmera), a imagem com as demarcações da pista filtradas, e imagens com cada tipo de demarcação identificada separadamente.
 
 <figure>
   <div style="text-align: center">
@@ -14,38 +13,18 @@ cada demarcações internas e externas.
   </div>
 </figure>
 
-A ideia aqui é usar as demarcações para manter o robô percorrendo dentro da faixa de trânsito. O
-seu robô deve utilizar o comportamento enamorado para permanecer a uma distância de tanto a LFO
-quanto LBO. Usaremos o arquivo `lane_following.py` para construir nosso agente.
+Seu robô deve utilizar as linhas de demarcação como fontes atratoras/repulsoras e implementar um veículo de Braiternberg cujo comportamento faz o robô percorrer a pista na faixa correta. 
+Sugerimos que você se inspire no comportamento enamorado para projetar um comportamento no qual o robô permanece a uma distância próxima tanto à LFO
+quanto à LBO, sem se colidir com nenhuma das duas. Utilize o arquivo [lane_following.py](./lane_following.py) como base para construir seu agente.
 
 ## Filtrando pontos de interesse
 
-De forma parecida com a atividade anterior, precisamos identificar os pontos de atração e repulsão.
-Para tanto, vamos construir dois filtros de cor para a LFO e LBO: em uma vamos identificar a cor
-amarelada da LFO, usando o espaço HSV para tanto; na outra, como devemos identificar a cor branca,
-usaremos o RGB para facilitar. O trecho de código no construtor de `Agent` define as fronteiras
-para detecção de cor.
-
-```python
-self.inner_lower = np.array([20, 85, 20])
-self.inner_upper = np.array([30, 255, 255])
-self.outer_lower = np.array([180, 180, 180])
-self.outer_upper = np.array([255, 255, 255])
-```
-
-No código, nos referimos como *inner* a marcação LFO e, como *outer*, a LBO. No método
-`Agent.preprocess`, de forma similar à tarefa anterior, identificamos os pixels que estão dentro do
-intervalo desejado e em seguida construímos a máscara: uma para cada marcação. O método retorna
-tanto a máscara para LFO e LBO quanto a união das duas máscaras.
-
-```python
-hsv = cv2.cvtColor(image, cv2.COLOR_RGB2HSV)
-inner_mask = cv2.inRange(hsv, self.inner_lower, self.inner_upper)//255
-outer_mask = cv2.inRange(image, self.outer_lower, self.outer_upper)//255
-mask = cv2.bitwise_or(inner_mask, outer_mask)
-self.masked = cv2.bitwise_and(image, image, mask=mask)
-return inner_mask, outer_mask, mask
-```
+De forma similar à atividade anterior, seu primeiro passo é projetar os filtros de segmentação por cor para identificar a LFO e LBO na imagem.
+Modifique o método `Agent.preprocess` para produzir matrizes de máscara segmentando os pontos da imagem de acordo com a LFO e LBO. 
+Note que os hiperespaços determinando os intervalos de filtragem das cores são definidos no método construtor da classe `Agent` (isto é, os vetores `self.inner_lowe`,`self.inner_upper`, `self.outer_lowe`, `self.outer_upper`).
+Recomdamos que você construa uma máscara para cada tipo de demaração (a implementação atual do método devolve as máscaras para LFO e LBO, independentemente, e também a união das duas máscaras).
+A figura acima mostra um exemplo de imagem capturada pela câmera, a união das máscaras e cada uma das máscaras
+individualmente.
 
 <figure>
   <div style="text-align: center">
@@ -53,12 +32,10 @@ return inner_mask, outer_mask, mask
   </div>
 </figure>
 
-A figura acima mostra a imagem original, a união das máscaras e cada uma das máscaras
-individualmente.
 
-## Ativação
+## Matrizes de conexão
 
-A sua tarefa nesta atividade é construir as matrizes de ativação
+Seu segundo passo é projetar as matrizes de conexão entre os sensors (as máscaras da imagem) e os motores:
 
 ```python
 inner_left_motor_matrix  : np.ndarray
@@ -66,9 +43,14 @@ inner_right_motor_matrix : np.ndarray
 outer_left_motor_matrix  : np.ndarray
 outer_right_motor_matrix : np.ndarray
 ```
+Faça os ajustes necessários das constantes regularizadoras no método `Agent.send_commands` para atingir o comportamento desejado.
+Considere qual o comportamento do agente em retas e em curvas à esquerda e à direita.
 
-que definem o comportamento do motor esquerdo e direito para as máscaras LFO e LBO. Faça os ajustes
-necessários das constantes regularizadoras no método `Agent.send_commands`. O comportamento
-desejado é uma reação *enamorado* para cada uma das faixas. Submeta sua solução (o arquivo
-`lane_following.py`) via e-disciplinas.
+## Avançado
+
+Para esta atividade, vamos supor que o agente inicia em uma posição dentro da faixa correta. Como bônus, você pode considerar o caso no qual o agente inicia fora da faixa correta, seja na faixa da mão contrária, seja fora da pista. Como você pode modificar os parâmetros acima para deixar o robô robusto a tal situação?
+
+## Submissão
+
+Submeta sua solução final (o arquivo [lane_following.py](./lane_following.py)) via e-disciplinas.
 
