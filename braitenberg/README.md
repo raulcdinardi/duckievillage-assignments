@@ -52,13 +52,13 @@ Inspecione o arquivo [braitenberg.py](./braitenberg.py) e note como as matrizes 
 Tanto o comportamento agressivo como o comportamento enamorado podem ser implementados usando uma relação de ativição linear entre os sensores e os motores:
 
 ```math
-p_e = c + g \cdot \sigma\left( \cdot \sum_{i=1}^n\sum_{j=1}^m E_{ij}\cdot M_{ij} \right),
+p_e = c + g \cdot\frac{1}{z}\left(\sum_{i=1}^n\sum_{j=1}^m E_{ij}\cdot M_{ij} \right),
 ```
 ```math
-p_d = c + g \cdot \sigma\left( \sum_{i=1}^n\sum_{j=1}^m D_{ij}\cdot M_{ij} \right) .
+p_d = c + g \cdot\frac{1}{z}\left(\sum_{i=1}^n\sum_{j=1}^m D_{ij}\cdot M_{ij} \right) .
 ```
 
-Nas equações acima, $`p_e`$ e $`p_d`$ são os sinais enviados aos motores regulando a tensão elétrica (no intervalo $`[-1,1]`$), $`c`$ é uma constante que mantêm o robô sempre se movendo (pense como ativação mínima na ausência de estímulo), $`g` é uma constante de ganho que amplifica (ou atenua) os estímulos a fim de controlar a velocidade ou estabilizar o movimento, $`\sigma`$ é um função que mapeia um real no intervalo $[0,1]$, $`M`$ é a máscara obtida pelo filtro de cores e $`z`$ é uma constante de normalização para que o numerador não cresça demais.
+Nas equações acima, $`p_e`$ e $`p_d`$ são os sinais enviados aos motores regulando a tensão elétrica (no intervalo $`[-1,1]`$), $`c`$ é uma constante que mantêm o robô sempre se movendo (pense como ativação mínima na ausência de estímulo), $`g`$ é uma constante de ganho que amplifica (ou atenua) os estímulos a fim de controlar a velocidade ou estabilizar o movimento, $`M`$ é a máscara obtida pelo filtro de cores e $`z`$ é uma constante de normalização para que a soma não cresça demais.
 
 Note que as matrizes de ativação são equivalentes aos sensores de luz no problema clássico dos
 veículos de Braitenberg. De forma parecida, podemos também mudar as conexões dos sensores para
