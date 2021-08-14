@@ -38,6 +38,15 @@ No código, nos referimos como *inner* a marcação LFO e, como *outer*, a LBO. 
 intervalo desejado e em seguida construímos a máscara: uma para cada marcação. O método retorna
 tanto a máscara para LFO e LBO quanto a união das duas máscaras.
 
+```python
+hsv = cv2.cvtColor(image, cv2.COLOR_RGB2HSV)
+inner_mask = cv2.inRange(hsv, self.inner_lower, self.inner_upper)//255
+outer_mask = cv2.inRange(image, self.outer_lower, self.outer_upper)//255
+mask = cv2.bitwise_or(inner_mask, outer_mask)
+self.masked = cv2.bitwise_and(image, image, mask=mask)
+return inner_mask, outer_mask, mask
+```
+
 <figure>
   <div style="text-align: center">
   <img src="img/1352.png" alt="Curva na pista.">
