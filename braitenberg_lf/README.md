@@ -21,9 +21,9 @@ quanto à LBO, sem se colidir com nenhuma das duas. Utilize o arquivo [lane_foll
 
 De forma similar à atividade anterior, seu primeiro passo é projetar os filtros de segmentação por cor para identificar a LFO e LBO na imagem.
 Modifique o método `Agent.preprocess` para produzir matrizes de máscara segmentando os pontos da imagem de acordo com a LFO e LBO. 
-Note que os hiperespaços determinando os intervalos de filtragem das cores são definidos no método construtor da classe `Agent` (isto é, os vetores `self.inner_lowe`,`self.inner_upper`, `self.outer_lowe`, `self.outer_upper`).
-Recomdamos que você construa uma máscara para cada tipo de demaração (a implementação atual do método devolve as máscaras para LFO e LBO, independentemente, e também a união das duas máscaras).
-A figura acima mostra um exemplo de imagem capturada pela câmera, a união das máscaras e cada uma das máscaras
+Note que os hiperespaços determinando os intervalos de filtragem das cores são definidos no método construtor da classe `Agent` (isto é, os vetores `self.inner_lower`,`self.inner_upper`, `self.outer_lower`, `self.outer_upper`).
+Recomendamos que você construa uma máscara para cada tipo de demarcação (a implementação atual do método devolve as máscaras para LFO e LBO, independentemente, e também a união das duas máscaras).
+A figura abaixo mostra um exemplo de imagem capturada pela câmera, a união das máscaras e cada uma das máscaras
 individualmente.
 
 <figure>
@@ -35,7 +35,7 @@ individualmente.
 
 ## Matrizes de conexão
 
-Seu segundo passo é projetar as matrizes de conexão entre os sensors (as máscaras da imagem) e os motores:
+Seu segundo passo é projetar as matrizes de conexão entre os sensores (as máscaras da imagem) e os motores:
 
 ```python
 inner_left_motor_matrix  : np.ndarray
