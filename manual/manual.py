@@ -12,8 +12,8 @@
 #  - Write a remote control Duckiebot
 #
 # Don't forget to run this from the Duckievillage root directory (example):
-#   conda activate duckietown
 #   cd ~/MAC0318/duckievillage
+#   conda activate duckietown
 #   python3 assignments/manual/manual.py
 #
 # Submission instructions:
