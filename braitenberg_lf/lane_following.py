@@ -11,7 +11,7 @@
 # Task:
 #  - Implement a Braitenberg's vehicle that performs the task of lane following in the duckietown environment.
 # Your agent should be able to follow a lane by reacting to the traffic markings on the road. Construct a
-# color segmentation filter to identify road markings and adapt the "lover" behavior so that the robot 
+# color segmentation filter to identify road markings and adapt the "lover" behavior so that the robot
 # moves forward while maintaining a short distance from either lane marking.
 #
 # Don't forget to run this file from the Duckievillage root directory path (example):
@@ -55,16 +55,16 @@ class Agent:
 
     # Image processing routine - Color segmentation
     def preprocess(self, image: np.ndarray) -> np.ndarray:
-        """ Returns a 2D array mask color segmentation of the image """        
+        """ Returns a 2D array mask color segmentation of the image """
         hsv = cv2.cvtColor(image, cv2.COLOR_RGB2HSV) # obtain HSV representation of image
         # filter out dashed yellow "inner" line
-        inner_mask = cv2.inRange(hsv, self.inner_lower, self.inner_upper)//255 
-        # filter out solid white "outter" line
-        outer_mask = cv2.inRange(hsv, self.outer_lower, self.outer_upper)//255 
-        # Note: it is possible to filter out pixels in the RGB format 
+        inner_mask = cv2.inRange(hsv, self.inner_lower, self.inner_upper)//255
+        # filter out solid white "outer" line
+        outer_mask = cv2.inRange(hsv, self.outer_lower, self.outer_upper)//255
+        # Note: it is possible to filter out pixels in the RGB format
         #  by replacing `hsv` with `image` in the commands above
         # produces combined mask (might or might not be useful)
-        mask = cv2.bitwise_or(inner_mask, outer_mask) 
+        mask = cv2.bitwise_or(inner_mask, outer_mask)
         self.masked = cv2.bitwise_and(image, image, mask=mask)
         return inner_mask, outer_mask, mask
 
@@ -135,6 +135,7 @@ def main():
             print('saving screenshot')
             img = env.render('rgb_array')
             cv2.imwrite(f'screenshot-{env.unwrapped.step_count}.png', cv2.cvtColor(img, cv2.COLOR_RGB2BGR))
+            cv2.imwrite(f'screenshot-masked-{env.unwrapped.step_count}.png', cv2.cvtColor(agent.masked, cv2.COLOR_RGB2BGR))
         env.render() # show image to user
 
     # Instantiate agent
