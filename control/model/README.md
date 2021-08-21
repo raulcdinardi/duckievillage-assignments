@@ -1,50 +1,43 @@
 # Atividade 4 - Modelagem
 
-Sua tarefa nesta atividade será construir um carrinho de controle remoto de forma similar à
-primeira atividade. A diferença está nas ações dadas ao robô. Enquanto que na Atividade 1
-construímos um agente que toma como ações a tensão nos motores esquerdo e direito, aqui iremos usar
-como ações uma velocidade $`v`$ e um ângulo $`\omega`$. Para isso, faremos um exercício de
-cinemática experimental. Relembremos as duas equações de transformação de velocidade e ângulo para
-tensão:
+Sua tarefa nesta atividade será modificar o controle remoto desenvolvido na primeira atividade para executar movimentos mais precisos que serão utilizados nas atividades seguintes. Ao invés de transformamos comandos do teclado diretamente em valores de tensão elétrica como na [../../manual/README.md](Atividade 1), você primeiro deve agora transformar os comandos de teclado em sinais de controle de velocidade $`v`$ e taxa de rotação $`\omega`$, que então são transformados em sinais de tensão a serem enviados ao robô. Isso é feito utilizando o modelo inverso de dinâmica visto em aula:
 
 ```math
 \begin{cases}
   V_l=\frac{2}{R}(K_m-K_t)(v-\omega L)\\
-  V_r=\frac{2}{R}(K_m+K_t)(v+\omega L)
+  V_r=\frac{2}{R}(K_m+K_t)(v+\omega L).
 \end{cases}
 ```
 
-onde $`V_l`$ e $`V_r`$ são as tensões desejadas do motor esquerdo e direito respectivamente a
-partir da velocidade $`v`$ e ângulo $`\omega`$ dados. As constantes $`R`$ e $`L`$ indicam o raio da
-roda e largura entre os eixos das rodas na construção do robô. As constantes $`K_m`$ e $`K_t`$ que
-representam imperfeições nas rodas ou construção do robô. Note que tais constantes são as únicas
-variáveis desconhecidas na equação. Tanto $`R`$ quanto $`L`$ são fácilmente mensuráveis no robô.
-Nossa primeira tarefa será estimar $`K_m`$ e $`K_t`$ para que possamos usar a equação acima.
+Na equação acima, $`V_l`$ e $`V_r`$ são as tensões elétricas a serem enviadas para o motor esquerdo e direito, respectivamente, a fim de que o robô se desloque com uma dada velocidade $`v`$ e taxa de rotação $`\omega`$. 
+As constantes $`R`$ e $`L`$ indicam o raio da roda e a distância entre o centro do robô e a roda, respectivamente. 
+No robô real, tais constanes seriam medidas. Aqui vamos adotar os valores usados no simulador (e portanto livre de imprecisões) $`R=0.0318`$ e $`L=0.102`$ [m], obtidos através das contantes
+```python
+env.radius
+env.unwrapped.wheel_dist
+```
+
+Em um robô ideal, as rodas e motores são idênticos e possuem a mesma constant $K_m$ relacionando tensão elétrica e torque. 
+No robô real, no entanto, as rodas e motores possuem discrepâncias que fazem com que essa relação seja distinta para cada roda.
+A constante $K_t$ provê um grau de liberdade adicional para corrigir tais discrepâncias.
+
+## Dinâmica inversa
+
+O primeiro passo é implementar a função `get_pwm_control` no arquivo [./agent.py](agent.py) que recebe valores de velocidade e taxa de rotação e os converte em valores de tensão para as rodas esquerda e direita do robô usando a equação acima. Note que você deve utilizar as constantes deconhecidas $`K_m`$ e $`K_t`$. Por ora, use valores arbitrários
 
 ## Estimando constantes
 
-O primeiro passo para estimar as constantes $`K_m`$ e $`K_t`$ é definir um experimento para
-medirmos as imperfeições. Considere o seguinte experimento proposto:
+Com a função de dinâmica inversa implementada, você deve realizar os seguintes experimentos empíricos a fim de determinar as constantes $`K_m`$ e $`K_t`$.
 
-> Fixamos uma velocidade retilínea arbitrária porém constante $`v`$ e velocidade angular
-> $`\omega=0`$ por $`t`$ segundos. Note que $`v`$ é, a princípio, desconhecido porém definido pelas
-> tensões dos motores $`V_l=V_r=c`$ para algum $`c`$ escolhido. Após $`t`$ segundos, o robô terá
-> andado uma distância $`d`$ com desvio angular $`\theta`$, que representam exatamente as
-> velocidades reais de $`v`$ e $`\omega`$. Com estas variáveis, acabamos com duas equações com duas
-> variáveis desconhecidas $`K_m`$ e $`K_t`$ a partir da equação de transformação.
+1. Com um valor arbitrário de ``K_m`$, encontre $`K_t`$ por tentativa e erro fixando potências idênticas em ambos os motores ($`V_l=V_r=c`$) e ajustando seu valor até que o robô ande em linha reta.
+2. Com a constante $`K_t`$ fixa, encontre o valor de $`K_m`$ para que o robô se mova em linha reta por exatamente 1 unidade de distância (o simulador usa uma unidade arbitrária para medir a pose do robô).
 
-Execute o experimento acima e utilize o resultado para estimar as constantes a partir das medidas
-$`d`$ e $`\theta`$. Imprima os valores estimados de $`K_m`$ e $`K_t`$, e use tais estimativas para
-encontrar e imprimir as tensões dos motores para que o robô ande a distância $`d`$ sem nenhum
-desvio angular.
+Assegure-se que os valores encontrados para as constantes estão corretos realizando o movimento como girar ao redor do seu eixo (ou seja, sem sair do lugar).
 
-**Dica:** use as fórmulas de Movimento Retilíneo Uniforme (MRU) para extrair as velocidades a
-partir das distâncias.
+## Controle por velocidade e rotação
 
-## Velocidade e ângulo
+Com as constantes estimadas, modifique a função `send_commands` do agente para que os comandos do teclado sejam convertidos em comandos de velocidade e ângulo (por exemplo, a tecla "esquerda" deve fazer o robô girar no seu eixo em sentido anti-horário, e a tecla "acima" deve fazer o robô se mover em velocidade constante para a frente). Se programa deve converter tais ações em comandos a serem enviados ao robô através da função ```get_pwm_control```.
 
-Com as constantes estimadas, use a equação (antes incompleta) para traduzir velocidade e ângulo em
-tensão para os motores. Construa um robô de controle remoto cujas ações são a velocidade e ângulo a
-serem executados, ao invés das potências do motor. Implemente o método `power` que toma uma
-velocidade $`v`$, velocidade angular $`w`$ e as constantes $`K_m`$ e $`K_t`$ e transforma nas
-tensões dos motores.
+use a equação (antes incompleta) para traduzir velocidade e ângulo em
+potência aos motores. Construa um robô de controle remoto cujas ações são a velocidade e ângulo a
+serem executados, ao invés das potências do motor.
