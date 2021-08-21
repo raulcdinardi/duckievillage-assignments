@@ -11,7 +11,7 @@ Sua tarefa nesta atividade será modificar o controle remoto desenvolvido na pri
 
 Na equação acima, $`V_l`$ e $`V_r`$ são as tensões elétricas a serem enviadas para o motor esquerdo e direito, respectivamente, a fim de que o robô se desloque com uma dada velocidade $`v`$ e taxa de rotação $`\omega`$. 
 As constantes $`R`$ e $`L`$ indicam o raio da roda e a distância entre o centro do robô e a roda, respectivamente. 
-No robô real, tais constanes seriam medidas. Aqui vamos adotar os valores usados no simulador (e portanto livre de imprecisões) $`R=0.0318`$ e $`L=0.102`$ [m], obtidos através das contantes
+No robô real, tais constanes seriam medidas. Aqui vamos adotar os valores usados no simulador (e portanto livre de imprecisões) $`R=0.0318`$ e $`2L=0.102`$ [m], obtidos através das contantes
 ```python
 agent.radius
 agent.baseline
@@ -23,7 +23,7 @@ A constante $K_t$ provê um grau de liberdade adicional para corrigir tais discr
 
 ## Dinâmica inversa
 
-O primeiro passo é implementar a função `get_pwm_control` no arquivo [agent.py](./agent.py) que recebe valores de velocidade e taxa de rotação e os converte em valores de tensão para as rodas esquerda e direita do robô usando a equação acima. Note que você deve utilizar as constantes deconhecidas $`K_m`$ e $`K_t`$. Por ora, use valores arbitrários
+O primeiro passo é implementar a função `get_pwm_control` no arquivo [agent.py](./agent.py) que recebe valores de velocidade e taxa de rotação e os converte em valores de tensão para as rodas esquerda e direita do robô usando a equação acima. Note que você deve utilizar as constantes deconhecidas $`K_m`$ e $`K_t`$. Por ora, adote os valores arbitrários fornecidos.
 
 ## Estimando constantes
 
