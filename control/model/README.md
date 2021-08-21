@@ -1,6 +1,6 @@
 # Atividade 4 - Modelagem
 
-Sua tarefa nesta atividade será modificar o controle remoto desenvolvido na primeira atividade para executar movimentos mais precisos que serão utilizados nas atividades seguintes. Ao invés de transformamos comandos do teclado diretamente em valores de tensão elétrica como na [../../manual/README.md](Atividade 1), você primeiro deve agora transformar os comandos de teclado em sinais de controle de velocidade $`v`$ e taxa de rotação $`\omega`$, que então são transformados em sinais de tensão a serem enviados ao robô. Isso é feito utilizando o modelo inverso de dinâmica visto em aula:
+Sua tarefa nesta atividade será modificar o controle remoto desenvolvido na primeira atividade para executar movimentos mais precisos que serão utilizados nas atividades seguintes. Ao invés de transformamos comandos do teclado diretamente em valores de tensão elétrica como na [Atividade 1](../../manual/README.md), você primeiro deve agora transformar os comandos de teclado em sinais de controle de velocidade $`v`$ e taxa de rotação $`\omega`$, que então são transformados em sinais de tensão a serem enviados ao robô. Isso é feito utilizando o modelo inverso de dinâmica visto em aula:
 
 ```math
 \begin{cases}
@@ -23,7 +23,7 @@ A constante $K_t$ provê um grau de liberdade adicional para corrigir tais discr
 
 ## Dinâmica inversa
 
-O primeiro passo é implementar a função `get_pwm_control` no arquivo [./agent.py](agent.py) que recebe valores de velocidade e taxa de rotação e os converte em valores de tensão para as rodas esquerda e direita do robô usando a equação acima. Note que você deve utilizar as constantes deconhecidas $`K_m`$ e $`K_t`$. Por ora, use valores arbitrários
+O primeiro passo é implementar a função `get_pwm_control` no arquivo [agent.py](./agent.py) que recebe valores de velocidade e taxa de rotação e os converte em valores de tensão para as rodas esquerda e direita do robô usando a equação acima. Note que você deve utilizar as constantes deconhecidas $`K_m`$ e $`K_t`$. Por ora, use valores arbitrários
 
 ## Estimando constantes
 
