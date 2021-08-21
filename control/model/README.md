@@ -29,7 +29,7 @@ O primeiro passo é implementar a função `get_pwm_control` no arquivo [./agent
 
 Com a função de dinâmica inversa implementada, você deve realizar os seguintes experimentos empíricos a fim de determinar as constantes $`K_m`$ e $`K_t`$.
 
-1. Com um valor arbitrário de ``K_m`$, encontre $`K_t`$ por tentativa e erro fixando potências idênticas em ambos os motores ($`V_l=V_r=c`$) e ajustando seu valor até que o robô ande em linha reta.
+1. Com um valor arbitrário de $`K_m`$, encontre $`K_t`$ por tentativa e erro fixando potências idênticas em ambos os motores ($`V_l=V_r=c`$) e ajustando seu valor até que o robô ande em linha reta.
 2. Com a constante $`K_t`$ fixa, encontre o valor de $`K_m`$ para que o robô se mova em linha reta por exatamente 1 unidade de distância (o simulador usa uma unidade arbitrária para medir a pose do robô).
 
 Assegure-se que os valores encontrados para as constantes estão corretos realizando o movimento como girar ao redor do seu eixo (ou seja, sem sair do lugar).
