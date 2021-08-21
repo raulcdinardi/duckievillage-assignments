@@ -31,7 +31,7 @@ import cv2
 class Agent:
     # Agent initialization
     def __init__(self, environment):
-        """ Initializes agent """
+        ''' Initializes agent '''
         self.env = environment
         # Time remaining.
         self.time = 0.0
@@ -45,12 +45,14 @@ class Agent:
         self.a_end = 0
         # If countdown is running.
         self.running = False
-
+        # Robot dimensions
+        self.baseline = environment.unwrapped.wheel_dist
+        # print(self.baseline)
         key_handler = key.KeyStateHandler()
         environment.unwrapped.window.push_handlers(key_handler)
         self.key_handler = key_handler
 
-    def power(v: float, w: float) -> tuple[float, float]:
+    def get_pwm_control(self, v: float, w: float) -> (float, float):
         ''' Takes velocity v and angle w and returns left and right power to motors.'''
         pwm_left, pwm_right = 0, 0
         return pwm_left, pwm_right
@@ -69,7 +71,7 @@ class Agent:
         if self.key_handler[key.D]:
             pass
 
-        pwm_left, pwm_right = self.power(v, w)
+        pwm_left, pwm_right = self.get_pwm_control(v, w)
 
         # Here's a snippet of code for measuring and estimating constants.
         # Add power to motors as long as time hasn't run out yet.
