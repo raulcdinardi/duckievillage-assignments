@@ -24,6 +24,7 @@
 import sys
 import pyglet
 import numpy as np
+import math
 from pyglet.window import key
 from duckievillage import create_env
 import cv2
@@ -45,17 +46,21 @@ class Agent:
         self.a_end = 0
         # If countdown is running.
         self.running = False
-        # Robot dimensions
-        self.baseline = environment.unwrapped.wheel_dist
-        # print(self.baseline)
+        # Wheel radius.
+        self.R = 0.0318
+        # Distance between wheels
+        self.L = environment.unwrapped.wheel_dist
+	# Motor constants
+	self.motor_gain = 1.0 # K_m
+	self.motor_trim = 0.0 # K_t
         key_handler = key.KeyStateHandler()
         environment.unwrapped.window.push_handlers(key_handler)
         self.key_handler = key_handler
 
-    def get_pwm_control(self, v: float, w: float) -> (float, float):
+    def get_pwm_control(self, v: float, w: float)-> (float, float):
         ''' Takes velocity v and angle w and returns left and right power to motors.'''
-        pwm_left, pwm_right = 0, 0
-        return pwm_left, pwm_right
+        l, r = 0, 0
+        return l, r
 
     def send_commands(self, dt):
         ''' Agent control loop '''
@@ -76,20 +81,38 @@ class Agent:
         # Here's a snippet of code for measuring and estimating constants.
         # Add power to motors as long as time hasn't run out yet.
         # You may remove this after you have already estimated constants.
+        c = 0.5
         if self.time > 0:
             self.time -= dt
-            pwm_left = 0.5
-            pwm_right = 0.5
+            pwm_left = c
+            pwm_right = c
         elif self.running:
             self.running = False
             self.p_end = self.env.get_position()
-            self.a_end = np.rad2deg(self.env.cur_angle)
+            self.a_end = self.env.cur_angle #np.rad2deg(self.env.cur_angle)
             print(f"Started at position {self.p_start}\n  Ended at {self.p_end}")
-            print(f"Started at angle {self.a_start}\n  Ended at {self.a_end}")
+            print(f"Started at angle {self.a_start}\n  Ended at {self.a_end}\n")
+
+            d = dist(self.p_start, self.p_end)
+            t = abs(self.a_start-self.a_end)
+            print(f"Distance: {d}")
+            print(f"Angle difference: {t}")
+
+            self.motor_gain = 1.0
+            self.motor_trim = 0.0
+            # Power to motors to correctly move distance d with no angular error.
+            p_pwm_l, p_pwm_r = self.get_pwm_control(d, 0)
+            print(f"  Estimate for K_m = {self.motor_gain}")
+            print(f"  Estimate for K_t = {self.motor_trim}")
+            print(f"    Verifying: for v = {d} and w = 0\n    pwm_l, pwm_r = ", p_pwm_l, p_pwm_r)
         # End of measurement snippet.
 
         self.env.step(pwm_left, pwm_right)
         self.env.render()
+
+def dist(p: np.ndarray, q: np.ndarray):
+    '''Returns the distance between two points p and q.'''
+    return math.sqrt(np.sum((p-q)**2))
 
 def main():
     print("MAC0318 - Assignment 4")
@@ -125,10 +148,10 @@ def main():
             env.close()
             sys.exit(0)
         elif symbol == key.SPACE: # Tells agent to perform an action for 2 seconds.
-            agent.time = 2
+            agent.time = 1
             agent.running = True
-            agent.p_end = env.get_position()
-            agent.a_end = np.rad2deg(env.cur_angle)
+            agent.p_start = env.get_position()
+            agent.a_start = env.cur_angle #np.rad2deg(env.cur_angle)
         elif symbol == key.RETURN:  # Reset pose.
             env.reset_pos()
 
