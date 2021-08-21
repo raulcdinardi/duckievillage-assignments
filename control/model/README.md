@@ -10,7 +10,7 @@ tensão:
 ```math
 \begin{cases}
   V_l=\frac{2}{R}(K_m-K_t)(v-\omega L)\\
-  V_r=\frac{2}{R}(K_m+K_t)(v+\omega L),
+  V_r=\frac{2}{R}(K_m+K_t)(v+\omega L)
 \end{cases}
 ```
 
@@ -24,18 +24,27 @@ Nossa primeira tarefa será estimar $`K_m`$ e $`K_t`$ para que possamos usar a e
 ## Estimando constantes
 
 O primeiro passo para estimar as constantes $`K_m`$ e $`K_t`$ é definir um experimento para
-medirmos as imperfeições. Considere os seguintes experimentos propostos:
+medirmos as imperfeições. Considere o seguinte experimento proposto:
 
-1. Percorremos uma distância $`d`$ por $`t`$ segundos com potências fixas $`V_l=V_r=c`$ para ambos
-   os motores.
-2. Giramos o robô $`\theta`$ graus sob um eixo definido, por exemplo, a roda direita, fixando
-   potência $`V_l=c`$ e $`V_r=0`$.
+> Fixamos uma velocidade retilínea arbitrária porém constante $`v`$ e velocidade angular
+> $`\omega=0`$ por $`t`$ segundos. Note que $`v`$ é, a princípio, desconhecido porém definido pelas
+> tensões dos motores $`V_l=V_r=c`$ para algum $`c`$ escolhido. Após $`t`$ segundos, o robô terá
+> andado uma distância $`d`$ com desvio angular $`\theta`$, que representam exatamente as
+> velocidades reais de $`v`$ e $`\omega`$. Com estas variáveis, acabamos com duas equações com duas
+> variáveis desconhecidas $`K_m`$ e $`K_t`$ a partir da equação de transformação.
 
-Execute os experimentos acima e utilize os resultados para estimar as constantes a partir das
-medidas $`d`$ e $`\theta`$.
+Execute o experimento acima e utilize o resultado para estimar as constantes a partir das medidas
+$`d`$ e $`\theta`$. Imprima os valores estimados de $`K_m`$ e $`K_t`$, e use tais estimativas para
+encontrar e imprimir as tensões dos motores para que o robô ande a distância $`d`$ sem nenhum
+desvio angular.
+
+**Dica:** use as fórmulas de Movimento Retilíneo Uniforme (MRU) para extrair as velocidades a
+partir das distâncias.
 
 ## Velocidade e ângulo
 
 Com as constantes estimadas, use a equação (antes incompleta) para traduzir velocidade e ângulo em
-potência aos motores. Construa um robô de controle remoto cujas ações são a velocidade e ângulo a
-serem executados, ao invés das potências do motor.
+tensão para os motores. Construa um robô de controle remoto cujas ações são a velocidade e ângulo a
+serem executados, ao invés das potências do motor. Implemente o método `power` que toma uma
+velocidade $`v`$, velocidade angular $`w`$ e as constantes $`K_m`$ e $`K_t`$ e transforma nas
+tensões dos motores.
