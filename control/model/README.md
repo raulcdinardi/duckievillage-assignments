@@ -13,8 +13,8 @@ Na equação acima, $`V_l`$ e $`V_r`$ são as tensões elétricas a serem enviad
 As constantes $`R`$ e $`L`$ indicam o raio da roda e a distância entre o centro do robô e a roda, respectivamente. 
 No robô real, tais constanes seriam medidas. Aqui vamos adotar os valores usados no simulador (e portanto livre de imprecisões) $`R=0.0318`$ e $`L=0.102`$ [m], obtidos através das contantes
 ```python
-env.radius
-env.unwrapped.wheel_dist
+agent.radius
+agent.baseline
 ```
 
 Em um robô ideal, as rodas e motores são idênticos e possuem a mesma constant $K_m$ relacionando tensão elétrica e torque. 
