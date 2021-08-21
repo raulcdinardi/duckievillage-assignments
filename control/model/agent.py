@@ -50,9 +50,9 @@ class Agent:
         self.radius = 0.0318
         # Distance between wheels
         self.baseline = environment.unwrapped.wheel_dist
-	# Motor constants
-	self.motor_gain = 1.0 # K_m
-	self.motor_trim = 0.0 # K_t
+        # Motor constants
+        self.motor_gain = 1.0 # K_m
+        self.motor_trim = 0.0 # K_t
         key_handler = key.KeyStateHandler()
         environment.unwrapped.window.push_handlers(key_handler)
         self.key_handler = key_handler
