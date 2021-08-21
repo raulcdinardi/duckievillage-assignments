@@ -47,9 +47,9 @@ class Agent:
         # If countdown is running.
         self.running = False
         # Wheel radius.
-        self.radius = 0.0318
+        self.radius = 0.0318 # [m]
         # Distance between wheels
-        self.baseline = environment.unwrapped.wheel_dist
+        self.baseline = 0.102 # [m]
         # Motor constants
         self.motor_gain = 1.0 # K_m
         self.motor_trim = 0.0 # K_t
