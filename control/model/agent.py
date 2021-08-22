@@ -50,16 +50,19 @@ class Agent:
         self.radius = 0.0318 # [m]
         # Distance between wheels
         self.baseline = 0.102 # [m]
+
         # Motor constants
         self.motor_gain = 1.0 # K_m
         self.motor_trim = 0.0 # K_t
+
         key_handler = key.KeyStateHandler()
         environment.unwrapped.window.push_handlers(key_handler)
         self.key_handler = key_handler
 
     def get_pwm_control(self, v: float, w: float)-> (float, float):
         ''' Takes velocity v and angle w and returns left and right power to motors.'''
-        l, r = 0, 0
+        l = 0
+        r = 0
         return l, r
 
     def send_commands(self, dt):
@@ -81,20 +84,19 @@ class Agent:
         # Here's a snippet of code for measuring and estimating constants.
         # Add power to motors as long as time hasn't run out yet.
         # You may remove this after you have already estimated constants.
-        c = 0.5
         if self.time > 0:
             self.time -= dt
-            pwm_left = c
-            pwm_right = c
+            pwm_left = 0.15
+            pwm_right = 0.15
         elif self.running:
             self.running = False
             self.p_end = self.env.get_position()
-            self.a_end = self.env.cur_angle #np.rad2deg(self.env.cur_angle)
+            self.a_end = self.env.cur_angle
             print(f"Started at position {self.p_start}\n  Ended at {self.p_end}")
             print(f"Started at angle {self.a_start}\n  Ended at {self.a_end}\n")
 
             d = dist(self.p_start, self.p_end)
-            t = abs(self.a_start-self.a_end)
+            t = self.a_end-self.a_start
             print(f"Distance: {d}")
             print(f"Angle difference: {t}")
 
@@ -119,10 +121,12 @@ def main():
     env = create_env(
         raw_motor_input = True,
         noisy = True,
-        mu_l = 0.007123895,
-        mu_r = -0.000523123,
+        mu_l = 0.00007123895,
+        mu_r = -0.00000523123,
+        std_l = 1e-7,
+        std_r = 1e-7,
         seed = 101,
-        map_name = './maps/loop_empty.yaml',
+        map_name = './maps/grassy_road.yaml',
         draw_curve = False,
         draw_bbox = False,
         domain_rand = False,
@@ -138,7 +142,7 @@ def main():
 
     angle = env.unwrapped.cam_angle[0]
 
-    env.start_pose = [[0.8, 0, 0.8], 4.5] # initial pose - position and heading
+    env.start_pose = [[0.5, 0, 1.575], 0]
     env.reset()
     env.render('human') # show visualization
 
@@ -151,7 +155,7 @@ def main():
             agent.time = 1
             agent.running = True
             agent.p_start = env.get_position()
-            agent.a_start = env.cur_angle #np.rad2deg(env.cur_angle)
+            agent.a_start = env.cur_angle
         elif symbol == key.RETURN:  # Reset pose.
             env.reset_pos()
 
