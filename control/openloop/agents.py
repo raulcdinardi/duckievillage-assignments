@@ -10,9 +10,9 @@
 #
 # Task:
 #  - Implement the following behavior agents:
-#   1. SquareAgent - moves in a fixed length square;
-#   2. CircleAgent - moves in a fixed radius circle;
-#   3. LaneAgent   - does a lane change.
+#   1. SquareAgent   - moves in a fixed length square;
+#   2. CircleAgent   - moves in a fixed radius circle;
+#   3. OvertakeAgent - does a duck overtake.
 #  - Use the constants from Assignment 4 to implement the power function and use it to move the
 #  agents.
 #
@@ -80,9 +80,8 @@ class Agent:
 
 class SquareAgent(Agent):
     def __init__(self, env):
-        '''Constructs a SquareAgent that walks an l-length square.'''
+        '''Constructs a SquareAgent that walks a square.'''
         super().__init__(env)
-        self.i = 0
         self.turning = False
 
     def start(self):
@@ -109,10 +108,9 @@ class SquareAgent(Agent):
         self.env.render()
 
 class CircleAgent(Agent):
-    def __init__(self, env, r: int = 1):
-        '''Constructs a CircleAgent that walks an r-radius circle.'''
+    def __init__(self, env):
+        '''Constructs a CircleAgent that walks a circle.'''
         super().__init__(env)
-        self.r = r
 
     def start(self):
         super().start()
@@ -137,9 +135,9 @@ class CircleAgent(Agent):
         self.env.step(pwm_left, pwm_right)
         self.env.render()
 
-class LaneAgent(Agent):
+class OvertakeAgent(Agent):
     def __init__(self, env):
-        '''Constructs a CircleAgent that does a lane change.'''
+        '''Constructs an OvertakeAgent that does an overtake.'''
         super().__init__(env)
 
     def start(self):
@@ -172,7 +170,7 @@ def plot_trajectory(T: list[np.ndarray], path: str):
     print("  Saved to ", path)
 
 def main():
-    print("MAC0318 - Assignment 4")
+    print("MAC0318 - Assignment 5")
     env = create_env(
         raw_motor_input = True,
         noisy = True,
@@ -201,7 +199,7 @@ def main():
     env.reset()
     env.render('human') # show visualization
 
-    agents = [SquareAgent(env), CircleAgent(env), LaneAgent(env)]
+    agents = [SquareAgent(env), CircleAgent(env), OvertakeAgent(env)]
     which = 0
 
     agent = agents[which]
@@ -218,7 +216,6 @@ def main():
             env.reset_pos()
         elif symbol == key.PERIOD: # Change to next agent.
             which = (which + 1) % 3
-            plot_trajectory(agent.trajectory, f"{agent.__class__.__name__}-{env.unwrapped.step_count}.png")
             pyglet.clock.unschedule(agent.send_commands)
             agent = agents[which]
             env.reset_pos()
