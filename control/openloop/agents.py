@@ -64,7 +64,7 @@ class Agent:
     def start(self):
         self.running = True
 
-    def power(self, v: float, w: float) -> tuple[float, float]:
+     def get_pwm_control(self, v: float, w: float)-> (float, float):
         ''' Takes velocity v and angle w and returns left and right power to motors.'''
         l = 0
         r = 0
@@ -72,8 +72,9 @@ class Agent:
 
     def send_commands(self, dt):
         ''' Agent control loop '''
-        # Record trajectory.
-        p = self.env.get_position()
+        # Store pose so that we can plot the robot's trajectory.
+        # These values should not be used by your agent, since we are running in open loop mode.
+        p = self.env.get_position() 
         q = self.trajectory[-1]
         if (not math.isclose(p[0], q[0], abs_tol = 1e-4)) or (not math.isclose(p[1], q[1], abs_tol = 1e-4)):
             self.trajectory.append(p)
@@ -99,7 +100,7 @@ class SquareAgent(Agent):
         if self.time > 0:
             self.time -= dt
             v, w = 0.5, 0.0
-            pwm_left, pwm_right = self.power(v, w)
+            pwm_left, pwm_right = self.get_pwm_control(v, w)
         elif self.running:
             self.running = False
         # End of snippet of code for line drawing.
@@ -127,7 +128,7 @@ class CircleAgent(Agent):
         if self.time > 0:
             self.time -= dt
             v, w = 0.5, 0.0
-            pwm_left, pwm_right = self.power(v, w)
+            pwm_left, pwm_right = self.get_pwm_control(v, w)
         elif self.running:
             self.running = False
         # End of snippet of code for line drawing.
@@ -155,7 +156,7 @@ class OvertakeAgent(Agent):
         if self.time > 0:
             self.time -= dt
             v, w = 0.5, 0.0
-            pwm_left, pwm_right = self.power(v, w)
+            pwm_left, pwm_right = self.get_pwm_control(v, w)
         elif self.running:
             self.running = False
         # End of snippet of code for line drawing.
