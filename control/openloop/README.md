@@ -1,39 +1,41 @@
 # Atividade 5 - Controle em Malha Aberta
 
-Nesta atividade, vamos usar as constantes $`K_m`$ e $`K_t`$ encontradas na Atividade 4 para
-construir três agentes que executam as seguintes trajetórias:
+Nesta atividade, você deve usar o modelo de veículo obtido na [Atividade 4](../model/), ou seja, 
+os valores determinados para as constantes $`K_m`$ e $`K_t`$, para projetar as regras de controle
+em malha aberta de agentes que executam as seguintes trajetórias:
 
-1. Anda em um quadrado;
-2. Anda em um círculo;
-3. Faz uma ultrapassagem.
+1. Andar em um quadrado até voltar à posição inicial;
+2. Andar em um círculo até voltar à posiçãi inicial;
+3. Ultrapassar um obstáculo parado na pista.
 
-Para tanto, primeiro leia o Jupyter Notebook [../Modelagem.ipynb](../Modelagem.ipynb) que explica
-os diferentes comportamentos no contexto de um robô com motor diferencial. Assim feito, vamos
-implementar os agentes no simulador!
+Recomendamos que antes de prosseguir você leia o [Jupyter notebook sobre modelagem](../Modelagem.ipynb) 
+para se familiarizar com o desenho de regras de controle em malha aberta para um robô com direção diferencial. 
 
-## Estimando as constantes
 
+Sua primeira tarefa 
 Para esta atividade, vamos usar o mesmo ambiente e mapa que usamos para a atividade passada.
 Portanto, você pode usar as mesmas constantes encontradas na [Atividade 4](../model/) para esta
-tarefa. Implemente o método `Agent.power` usando estas mesmas constantes.
+tarefa. 
 
 ## Implementando os agentes
 
 O código [agents.py](./agents.py) usa uma classe base `Agent` contendo métodos comuns, como o
-método `Agent.power`. A função de atualização do robô é dada pelo método `send_commands`, que tem
-como argumento um `float` `dt`. Esta variável conta a diferença de tempo desde a sua última chamada
-de função. Você pode usar isto para controlar o tempo de cada ação do agente.
+método `Agent.get_pwm_control`, que mapeia valores de velocidade do agente em valores de sinais de comando aos motores.
+Copie essa função da sua solução para a [Atividade 4](../model/).
 
-Para cada agente (`SquareAgent`, `CircleAgent` e `OvertakeAgent`), implemente os métodos
-`send_commands` para que eles executem os seus respectivos comportamentos. Você pode adicionar
-variáveis e métodos nestas classes sem restrição.
+Como nas atividades anteriores, o comando do robô é efetuado pelo método `send_commands`, que tem
+como argumento um variável `dt` do tipo `float`. Essa variável mede a o tempo desde a sua última chamada
+de função. Você pode usá-la para controlar o tempo de uma ação do agente.
+
+As classes derivadas `SquareAgent`, `CircleAgent` e `OvertakeAgent`, devem implemetar os respectivos comportamentos 
+por meio do método `send_commands`. Você pode adicionar variáveis e métodos nestas classes sem restrição.
 
 **Dica:** use `start` para definir um tempo inicial para a primeira ação.
 
 ## Desenhando as trajetórias
 
 Você pode salvar a trajetória executada pelo robô com a tecla `P`. Para mudar de agente, use as
-teclas `,` e `.`. Suas trajetórias devem parecer com os seguintes exemplos:
+teclas `,` e `.`. Suas trajetórias devem se parecer com os seguintes exemplos:
 
 <figure>
   <div style="text-align: center">
