@@ -64,7 +64,7 @@ class Agent:
     def start(self):
         self.running = True
 
-     def get_pwm_control(self, v: float, w: float)-> (float, float):
+    def get_pwm_control(self, v: float, w: float)-> (float, float):
         ''' Takes velocity v and angle w and returns left and right power to motors.'''
         l = 0
         r = 0
