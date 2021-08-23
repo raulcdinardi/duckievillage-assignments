@@ -11,8 +11,6 @@ em malha aberta de agentes que executam as seguintes trajetórias:
 Recomendamos que antes de prosseguir você leia o [Jupyter notebook sobre modelagem](../Modelagem.ipynb) 
 para se familiarizar com o desenho de regras de controle em malha aberta para um robô com direção diferencial. 
 
-
-Sua primeira tarefa 
 Para esta atividade, vamos usar o mesmo ambiente e mapa que usamos para a atividade passada.
 Portanto, você pode usar as mesmas constantes encontradas na [Atividade 4](../model/) para esta
 tarefa. 
@@ -39,9 +37,9 @@ teclas `,` e `.`. Suas trajetórias devem se parecer com os seguintes exemplos:
 
 <figure>
   <div style="text-align: center">
-  <img src="../img/square.png" alt="Trajetória para o SquareAgent.">
-  <img src="../img/circle.png" alt="Trajetória para o CircleAgent.">
-  <img src="../img/overtake.png" alt="Trajetória para o OvertakeAgent.">
+  <img src="../img/square.png" alt="Trajetória para o SquareAgent." width="250px">
+  <img src="../img/circle.png" alt="Trajetória para o CircleAgent." width="250px">
+  <img src="../img/overtake.png" alt="Trajetória para o OvertakeAgent." width="250px">
   </div>
 </figure>
 
