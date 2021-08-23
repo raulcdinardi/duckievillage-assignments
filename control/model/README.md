@@ -4,8 +4,8 @@ Sua tarefa nesta atividade será modificar o controle remoto desenvolvido na pri
 
 ```math
 \begin{cases}
-  V_l=\frac{2}{R}(K_m-K_t)(v-\omega L)\\
-  V_r=\frac{2}{R}(K_m+K_t)(v+\omega L).
+  V_l=\frac{1}{R}(K_m-K_t)(v-\omega L)\\
+  V_r=\frac{1}{R}(K_m+K_t)(v+\omega L).
 \end{cases}
 ```
 

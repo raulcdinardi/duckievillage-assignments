@@ -121,8 +121,8 @@ def main():
     env = create_env(
         raw_motor_input = True,
         noisy = True,
-        mu_l = 0.00007123895,
-        mu_r = -0.00000523123,
+        mu_l = 0.007123895,
+        mu_r = -0.000523123,
         std_l = 1e-7,
         std_r = 1e-7,
         seed = 101,
