@@ -43,6 +43,8 @@ teclas `,` e `.`. Suas trajetórias devem se parecer com os seguintes exemplos:
   </div>
 </figure>
 
+Como nos exemplos acima, note que as trajetórias não conseguem retornar ao ponto de origem devido às imprecisões e imperfeições do modelo do robô (que são simuladas no simulador por meio de ruídos aleatórios).  
+
 ## Submissão
 
 Submeta o arquivo `agents.py` contendo sua solução junto com os desenhos das trajetórias dos três agentes pelo
