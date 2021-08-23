@@ -61,9 +61,9 @@ class Agent:
 
     def get_pwm_control(self, v: float, w: float)-> (float, float):
         ''' Takes velocity v and angle w and returns left and right power to motors.'''
-        l = 0
-        r = 0
-        return l, r
+        V_l = (self.motor_gain - self.motor_trim)*(v-w*self.baseline/2)/self.radius
+        V_r = (self.motor_gain + self.motor_trim)*(v+w*self.baseline/2)/self.radius
+        return V_l, V_r
 
     def send_commands(self, dt):
         ''' Agent control loop '''
@@ -71,13 +71,13 @@ class Agent:
 
         # Map keys to velocity and angle actions.
         if self.key_handler[key.W]:
-            pass
+            v = 0.2 # move forward at 0.2 [m/s]
         if self.key_handler[key.A]:
-            pass
+            w = 10 # rotate counter-clockwise 10 [rot/s]
         if self.key_handler[key.S]:
-            pass
+            v = -0.2 # move backward at 0.2 [m/s]
         if self.key_handler[key.D]:
-            pass
+            w = -10 # rotate clockwise at 10 [rot/s]
 
         pwm_left, pwm_right = self.get_pwm_control(v, w)
 
