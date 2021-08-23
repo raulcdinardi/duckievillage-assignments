@@ -25,6 +25,8 @@ Com a função de dinâmica inversa implementada, você deve realizar os seguint
 
 Assegure-se que os valores encontrados para as constantes estão corretos realizando o movimento como girar ao redor do seu eixo (ou seja, sem sair do lugar).
 
+Note que o simulador espera valores para $`V_l`$ e $`V_r`$ no intervalo $`[-1,1]`$.  Usar valores altos para as constantes pode fazer com que os respectivos valores de tensão sejam limitados a tal intervalo (parecendo que o robô não responde aos comandos dados).
+
 ## Submissão
 
 Submeta o seu código `agent.py` pelo e-disciplinas.
