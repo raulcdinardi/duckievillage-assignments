@@ -45,5 +45,5 @@ teclas `,` e `.`. Suas trajetórias devem se parecer com os seguintes exemplos:
 
 ## Submissão
 
-Submeta o seu código `agents.py` junto com os desenhos das trajetórias dos três agentes pelo
+Submeta o arquivo `agents.py` contendo sua solução junto com os desenhos das trajetórias dos três agentes pelo
 e-disciplinas.
