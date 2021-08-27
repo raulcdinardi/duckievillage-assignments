@@ -39,6 +39,11 @@ class Agent:
         environment.unwrapped.window.push_handlers(key_handler)
         self.key_handler = key_handler
 
+    def preprocess(self) -> float:
+        '''Returns the metric to be used as signal for the PID controller.'''
+        d, alpha = self.env.lf_target()
+        return 6*d+alpha
+
     def send_commands(self, dt):
         ''' Agent control loop '''
         pwm_left, pwm_right = 0, 0
@@ -56,7 +61,7 @@ class Agent:
         # End of remote control snippet.
 
         # Target value for lane-following.
-        t = self.env.lf_target()
+        t = self.preprocess()
         print(t)
 
         self.env.step(pwm_left, pwm_right)
