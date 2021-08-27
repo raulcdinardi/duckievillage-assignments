@@ -24,7 +24,8 @@ A implementação fornecida assume que $`C=6`$, mas você pode alterar esse valo
 
 ## Controle PID
 
-Você deve determinar as constantes $K_p$, $K_d$ e $K_i$ de um controlador PID para que o robô percorra a pista dentro da respectiva faixa, de maneira estável, responsiva e não oscilatória. Você pode seguir a abordagem de ajuste manual ou alguma abordagem semi-empírica.
-Sugerimos que você familiarize com o desenho de controles PID resolvendo o exercício proposto no [notebook](./Controle\ PID.ipynb) fornecido.
+Você deve determinar as constantes $K_p$, $K_d$ e $K_i$ de um controlador PID para que o robô percorra a pista dentro da respectiva faixa, de maneira estável, responsiva e não oscilatória. Para ajustar as constantes, você pode seguir a abordagem de ajuste manual ou alguma abordagem semi-empírica.
+O seu controlador deve manter uma velocidade longitudinal $`v`$ constante (sugerimos, $`v=0.2`$), e controlar a taxa de rotação ou velocidade angular $`\omega`$ de acordo com o erro $`e(t)=0-y(t)`$. 
+Sugerimos que você se familiarize com o desenho de controles PID resolvendo o exercício proposto no [notebook](./Controle\ PID.ipynb) fornecido.
 Quando estiver contente com o seu agente, submeta o arquivo `agent.py` via e-disciplinas.
 
