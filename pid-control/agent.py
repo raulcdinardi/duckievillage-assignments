@@ -67,7 +67,7 @@ class Agent:
         # Manual control for testing in order to understand the environment.
         # You should delete this snippet after your controller is set.
         if self.key_handler[key.W]:
-            self.velocity = 0.2 
+            self.velocity = 0.2
         if self.key_handler[key.A]:
             self.rotation += 0.5
         if self.key_handler[key.S]:
@@ -89,10 +89,10 @@ def main():
     print("MAC0318 - Assignment 6")
     env = create_env(
         raw_motor_input = True,
-	noisy = True,
+        noisy = True,
         mu_l = 0.007123895,
         mu_r = -0.000523123,
-	std_l = 1e-7,
+        std_l = 1e-7,
         std_r = 1e-7,
         seed = 101,
         map_name = './maps/loop_empty.yaml',
