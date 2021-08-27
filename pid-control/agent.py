@@ -13,6 +13,8 @@
 #
 # Don't forget to run this file from the Duckievillage root directory path (example):
 #   cd ~/MAC0318/duckievillage
+#   git pull
+#   $(bash) update.sh
 #   conda activate duckietown
 #   python3 assignments/pid-control/agent.py
 #
@@ -34,44 +36,62 @@ class Agent:
     def __init__(self, environment):
         ''' Initializes agent '''
         self.env = environment
-
+        # Wheel radius
+        self.radius = 0.0318 # R
+        # Distance between wheels
+        self.baseline = environment.unwrapped.wheel_dist # 2L = 0.102 [m]
+         # Motor constants
+        self.motor_gain = 0.0784739898632288 # K_m
+        self.motor_trim = 0.0007500911693361842 # K_t
+        # Controller
+        self.C = 6.0 # constant for combining output values
         key_handler = key.KeyStateHandler()
         environment.unwrapped.window.push_handlers(key_handler)
+        self.velocity = 0.0 # robot's logitudinal velocity
+        self.rotation = 0.0 # robot's angular velocity
         self.key_handler = key_handler
 
     def preprocess(self) -> float:
         '''Returns the metric to be used as signal for the PID controller.'''
         d, alpha = self.env.lf_target()
-        return 6*d+alpha
+        return self.C*d+alpha
+
+    def get_pwm_control(self, v: float, w: float)-> (float, float):
+        ''' Takes velocity v and angle w and returns left and right power to motors.'''
+        V_l = (self.motor_gain - self.motor_trim)*(v-w*self.baseline/2)/self.radius
+        V_r = (self.motor_gain + self.motor_trim)*(v+w*self.baseline/2)/self.radius
+        return V_l, V_r
 
     def send_commands(self, dt):
         ''' Agent control loop '''
-        pwm_left, pwm_right = 0, 0
-
-        # Remote control for testing in order to understand the environment.
-        # You may delete this snippet.
+        # Manual control for testing in order to understand the environment.
+        # You should delete this snippet after your controller is set.
         if self.key_handler[key.W]:
-            pwm_left += 0.5; pwm_right += 0.5
+            self.velocity += 0.1 
         if self.key_handler[key.A]:
-            pwm_left -= 0.25; pwm_right += 0.25
+            self.rotation += 0.1
         if self.key_handler[key.S]:
-            pwm_left -= 0.5; pwm_right -= 0.5
+            self.velocity -= 0.1
         if self.key_handler[key.D]:
-            pwm_left += 0.25; pwm_right -= 0.25
+            self.rotation -= 0.1
         # End of remote control snippet.
 
-        # Target value for lane-following.
-        t = self.preprocess()
-        print(t)
+        pwm_left, pwm_right = self.get_pwm_control(self.velocity, self.rotation)
 
-        self.env.step(pwm_left, pwm_right)
-        self.env.render()
+        # Target value for lane-following.
+        y = self.preprocess()
+        # print(y) # uncomment this for debugging
+
+        self.env.step(pwm_left, pwm_right) # send commands to motor
+        self.env.render() # simulate environment
 
 def main():
     print("MAC0318 - Assignment 6")
     env = create_env(
         raw_motor_input = True,
         seed = 101,
+        mu_l = 0.007123895,
+        mu_r = -0.000523123,
         map_name = './maps/loop_empty.yaml',
         draw_curve = False,
         draw_bbox = False,
