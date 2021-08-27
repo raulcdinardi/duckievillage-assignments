@@ -29,7 +29,7 @@ e $`\alpha`$ o ângulo entre a posição do robô e a tangente da curva definida
 sintetizar estas duas variáveis em uma única função $`t`$
 
 ```math
-  t(d, \alpha)=6*d+\alpha.
+  t(d, \alpha)=6d+\alpha.
 ```
 
 Em termos de código, $`t`$ é dada como a função `Agent.preprocess`, que faz o cálculo para
