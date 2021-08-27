@@ -41,7 +41,7 @@ class Agent:
         # Distance between wheels
         self.baseline = environment.unwrapped.wheel_dist # 2L = 0.102 [m]
          # Motor constants
-        self.motor_gain = 0.0784739898632288 # K_m
+        self.motor_gain = 0.68*0.0784739898632288 # K_m
         self.motor_trim = 0.0007500911693361842 # K_t
         # Controller
         self.C = 6.0 # constant for combining output values
@@ -67,13 +67,13 @@ class Agent:
         # Manual control for testing in order to understand the environment.
         # You should delete this snippet after your controller is set.
         if self.key_handler[key.W]:
-            self.velocity += 0.1 
+            self.velocity = 0.2 
         if self.key_handler[key.A]:
-            self.rotation += 0.1
+            self.rotation += 0.5
         if self.key_handler[key.S]:
-            self.velocity -= 0.1
+            self.velocity = 0.0
         if self.key_handler[key.D]:
-            self.rotation -= 0.1
+            self.rotation = -0.5
         # End of remote control snippet.
 
         pwm_left, pwm_right = self.get_pwm_control(self.velocity, self.rotation)
@@ -89,9 +89,12 @@ def main():
     print("MAC0318 - Assignment 6")
     env = create_env(
         raw_motor_input = True,
-        seed = 101,
+	noisy = True,
         mu_l = 0.007123895,
         mu_r = -0.000523123,
+	std_l = 1e-7,
+        std_r = 1e-7,
+        seed = 101,
         map_name = './maps/loop_empty.yaml',
         draw_curve = False,
         draw_bbox = False,
