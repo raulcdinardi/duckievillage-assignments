@@ -27,12 +27,12 @@ q_{t+1} = q_t + \alpha ( F_{att}(q_t) + F_{rep}(q_t) )\, ,
 
 onde $`q_t = \begin{bmatrix} x_t & y_t \end{bmatrix}^t`$ é a posição atual do agente e $\alpha$ é um parâmetro da otimimzação chamado de tamanho do passo. 
 
-Você deve implementar a função `preprocess` para que elea devolva o ponto $`q_{t+1}`$
+Você deve implementar a função `preprocess` para que elea devolva o ponto $`q_{t+1}`$.
 
 
 ## Controlador
 
-O ponto $q_{t+1}$ pode então ser usado para projetar sinais de controle de velocidade linear $`v`$ e angular $`\omega`$ para o agente.
+O ponto $`q_{t+1}`$ pode então ser usado para projetar sinais de controle de velocidade linear $`v`$ e angular $`\omega`$ para o agente.
 Nessa proposta, o ponto alvo nunca é de fato alcançado (visto que o alvo é móvel).
 Você deve implementar na função `send_commands` um controlador proporcional de velocidade do robô para seguir o ponto $`q_{t+1}`$ devolvido pela função  `preprocess` a cada instante de decisão.
 
