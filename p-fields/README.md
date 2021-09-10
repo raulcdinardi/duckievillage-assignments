@@ -20,11 +20,10 @@ A tarefa 1 pode ser realizada por um planejador de trajetória baseado em Campos
 ```math
 q_{t+1} = \begin{bmatrix} x_{t+1} & y_{t+1} \end{bmatrix}^t
 ```  
-é obtido minimizando
+é obtido pela equação
 ```math
 q_{t+1} = q_t + \alpha ( F_{att}(q_t) + F_{rep}(q_t) )\, ,
 ```
-
 onde $`q_t = \begin{bmatrix} x_t & y_t \end{bmatrix}^t`$ é a posição atual do agente e $\alpha$ é um parâmetro da otimimzação chamado de tamanho do passo. 
 
 Você deve implementar a função `preprocess` para que elea devolva o ponto $`q_{t+1}`$.
