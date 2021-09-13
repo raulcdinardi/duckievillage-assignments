@@ -38,22 +38,23 @@ def go_mr_duckie(env):
     return env.add_walking_duckie(p)
 mr_duckie = None
 
-def mr_duckie_pos():
+def mr_duckie_pos() -> np.ndarray:
     '''Returns the position of Mr. Duckie, the walking duck.'''
     return np.delete(mr_duckie.pos, 1)
 
-def dist(p, q):
+def dist(p: np.ndarray, q: np.ndarray) -> float:
     '''Returns the distance between two points.'''
     return np.linalg.norm(p-q)
 
-def line(a, b, x):
+def line(a: np.ndarray, b: np.ndarray, x: float) -> float:
     '''Line equation function.'''
     return a + x*(b-a)
 
-def dist_obj(p, o):
+def dist_obj(p: np.ndarray, o: list) -> (float, np.ndarray):
     '''
     Measures the distance between a point p and an object (polygon) o. The polygonal object is
-    represented as a list of vertices.
+    represented as a list of vertices. Returns the distance and the nearest point in the frontier
+    of o relative to p.
     '''
     a = o[-1]
     m, mo = math.inf, None
@@ -106,11 +107,11 @@ class Agent:
         V_r = (self.motor_gain + self.motor_trim)*(v+w*self.baseline)/self.radius
         return V_l, V_r
 
-    def F_att(self, p, g):
+    def F_att(self, p: np.ndarray, g: np.ndarray) -> float:
         '''Returns the attraction force applied at position p from goal g.'''
         return 0
 
-    def F_rep(self, p, o):
+    def F_rep(self, p: np.ndarray, o: list) -> float:
         '''Returns the repulsion force applied at position p from object o.'''
         return 0
 
@@ -122,7 +123,7 @@ class Agent:
         '''
         return np.array([0, 0])
 
-    def send_commands(self, dt):
+    def send_commands(self, dt: float):
         ''' Agent control loop '''
         pwm_left, pwm_right = 0, 0
 
