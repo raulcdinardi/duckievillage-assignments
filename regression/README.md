@@ -22,3 +22,5 @@ Você deve construir uma rede neural como regressor para prever o valor $y$ a pa
 
 Você deve escolher uma arquitetura para a rede neural que seja suficientemente complexa para capturar a complexidade da tarefa, mas de tamanho reduzido para não introduzir muita latência no préprocessamento (nem consumir muitos recursos no aprendizado).
 
+Sugerimos que antes de começar você se familiarize com os conceitos de [regressão](./Aprendizado\ supervisionado.ipynb) e [redes neurais](./Redes\ neurais.ipynb) por meio dos notebooks disponíveis.
+
