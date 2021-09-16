@@ -74,12 +74,11 @@ class Agent:
         I = self.env.front() # captures image from the robot's front camera
         I = cv2.resize(I, (128, 96)) # resize it to reduce processing cost
         hsv = cv2.cvtColor(I, cv2.COLOR_RGB2HSV)
-        inner_mask = cv2.inRange(hsv, self.inner_lower, self.inner_upper)//255
-        outer_mask = cv2.inRange(hsv, self.outer_lower, self.outer_upper)//255
-        mask = cv2.bitwise_or(inner_mask, outer_mask)
-        I = self.normalize(cv2.bitwise_and(I, I, mask=mask).reshape(1, 128*96*3))
-        y = float(self.regressor(I))
-        return y # value y=6*d + alpha
+        inner_mask = cv2.inRange(hsv, self.inner_lower, self.inner_upper)//255 # yellow dashed line
+        outer_mask = cv2.inRange(hsv, self.outer_lower, self.outer_upper)//255 # white line
+        mask = cv2.bitwise_or(inner_mask, outer_mask) # joins both masks into one
+        I = cv2.bitwise_and(I, I, mask=mask) # resulting image from mask above
+        return 0 # value y=6*d + alpha
 
     def get_pwm_control(self, v: float, w: float)-> (float, float):
         ''' Takes velocity v and angle w and returns left and right power to motors.'''
