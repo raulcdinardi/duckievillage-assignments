@@ -19,9 +19,10 @@ Da mesma forma, você deve implementar o controlador PID no método `Agent.send_
 
 ## Estimação de pose na pista baseada em aprendizado supervisionado
 
-Você deve construir uma rede neural como regressor para prever o valor $y$ a partir de uma imagem. De acordo com a metodologia de aprendizado supervisionado, você deve obter um conjunto de dados rotulados (nesse caso, de imagens anotadas com os valores de saída $y$ correspondentes) e segmentá-lo em partes de treino, validação e teste. Para sua conveniência, nós fornecemos um conjunto de dados rotulados de imagens de tamanho 128x96 pixels, pré-processadas para segmentar as cores das faixas intermitentes (amarelas) e contínuas (brancas), de maneira a simplificar o problema. Note que as imagens possuem um tamanho menor que as imagens capturadas pelo robô; isso reduz a sobrecarga computacional de processamento da rede neural sem afetar a acurácia do modelo. A função `Agent.preprocess` já contém os passos para segmentar as imagens tal qual foi usado para produzir os dados.
+Você deve construir uma rede neural como regressor para prever o valor $`y`$ a partir de uma imagem. De acordo com a metodologia de aprendizado supervisionado, você deve obter um conjunto de dados rotulados (nesse caso, de imagens anotadas com os valores de saída $`y`$ correspondentes) e segmentá-lo em partes de treino, validação e teste. 
+Para sua conveniência, nós fornecemos um [conjunto de imagens de tamanho 80x42 pixels](https://drive.google.com/file/d/1n9uitBceCk4xXEJ7njoKWFMXpNegySDQ/view?usp=sharing) e [seus respectivos rótulos](https://drive.google.com/file/d/1yVujNH-Hd7ifqKrgAe6XscawdhDVkn_f/view?usp=sharing).
+As imagens foram pré-processadas para remover a parte acima do horizonte de maneira a simplificar o problema. Note que as imagens possuem um tamanho menor que as imagens capturadas pelo robô; isso reduz a sobrecarga computacional de processamento da rede neural sem afetar a acurácia do modelo. A função `Agent.preprocess` já contém os passos para segmentar as imagens tal qual foi usado para produzir os dados.
 
-**Importante:** Não esqueça de normalizar as imagens com a média e desvio padrão assim como foi feito durante o treino!
 
 Você deve escolher uma arquitetura para a rede neural que seja suficientemente complexa para capturar a complexidade da tarefa, mas de tamanho reduzido para não introduzir muita latência no préprocessamento (nem consumir muitos recursos no aprendizado).
 
