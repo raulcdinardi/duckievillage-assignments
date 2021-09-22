@@ -127,8 +127,7 @@ class EvaluationAgent(Agent):
     def __init__(self, environment):
         ''' Initializes agent '''
         super().__init__(environment, randomize = True)
-        # self.pose_estimator = EvaluationAgent.load_regression_model("assignments/regression-cnn/cnn_lane_pos_estimation.h5")
-        self.pose_estimator = EvaluationAgent.load_regression_model("/tmp/cnn.h5")
+        self.pose_estimator = EvaluationAgent.load_regression_model("assignments/regression-cnn/cnn_lane_pos_estimation.h5")
         self.score = 0
 
     @staticmethod
