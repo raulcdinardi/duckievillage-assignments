@@ -41,7 +41,7 @@ pressionar do botão `ESC`.
 ### Treinando seu modelo
 
 Agora que temos os dados, podemos aprender nosso modelo. Treine uma rede neural convolucional que
-toma como entrada imagens coloridas $`80x60`$ e retorna ambas as velocidades a serem atuadas no
+toma como entrada imagens coloridas $`80\times 60`$ e retorna ambas as velocidades a serem atuadas no
 agente. Use a classe `EvaluationAgent` para avaliar seu escore.
 
 ### Verificando a robustez
@@ -62,6 +62,18 @@ Agora, execute novamente o seu modelo. Note que o modelo que funcionava anterior
 seguir uma reta. Isso acontece pois sua rede estava correlacionando a cor da grama com as
 velocidades a serem seguidas. Porém, no nosso caso, a cor da grama é irrelevante para as ações do
 agente.
+
+<figure>
+  <div style="text-align:center;">
+  <img src="img/fire.jpg" alt="Incêndio na Califórnia." width="600px">
+  <figcaption><b>Fonte:</b> Wikipedia</figcaption>
+  </div>
+</figure>
+
+A invariância da cor em certos casos é importante para direção autônoma, afinal a performance de um
+carro autônomo deveria se manter alta no caso de algum evento externo. Por exemplo, a imagem acima
+mostra as ruas de uma cidade na Califórnia após os incêndios de 2020. É razoável (e especialmente
+desejável) esperar que o carro continue funcionando durante o apocalipse.
 
 Faça a mesma mudança no construtor da classe `DataAgent` e colete mais dados do ambiente desta vez
 aleatorizado. Concatene os dados coletados antes da aleatorização com os coletados agora e retreine

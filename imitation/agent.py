@@ -6,12 +6,12 @@
 #
 # ---
 #
-# Assignment 9 - End-to-end lane following with convolutional neural networks
+# Assignment 10 - Imitation learning
 #
 # Don't forget to run this file from the Duckievillage root directory path (example):
 #   cd ~/MAC0318/duckievillage
 #   conda activate duckietown
-#   python3 assignments/regression-cnn/agent.py
+#   python3 assignments/imitation/agent.py
 #
 # Submission instructions:
 #  0. Add your name and USP number to the file header above.
@@ -42,25 +42,30 @@ class Agent:
         self.motor_gain = 0.68*0.0784739898632288
         self.motor_trim = 0.0007500911693361842
 
-        if randomize:
-            f = [self.env.add_static_duckie, self.env.add_static_big_duckie, self.env.add_cone]
-            k = self.env.road_tile_size/2
-            s = (-k/2, k/2)
-            r = lambda: random.random()*random.choice(s)
-            for i, t in enumerate(self.env.grid):
-                if (t["kind"] == "floor") and (random.random() > 0.5):
-                    x, y = t["coords"]
-                    random.choice(f)(x*self.env.road_tile_size+k+r(), y*self.env.road_tile_size+k+r())
-
-            self.env.domain_rand = True
-            self.env.color_sky = [random.random(), random.random(), random.random()]
-            self.env.color_ground = (random.random(), random.random(), random.random())
-            self.env.start_pose = self.random_road_pose()
-            self.env.random_reset()
+        if randomize: self.randomize()
 
         key_handler = key.KeyStateHandler()
         env.unwrapped.window.push_handlers(key_handler)
         self.key_handler = key_handler
+
+    def randomize(self):
+        self.env.objects = []
+        f = [self.env.add_static_duckie, self.env.add_static_big_duckie, self.env.add_cone]
+        g = [self.env.add_static_duckiebot, self.env.add_cone, self.env.add_static_duckie]
+        k = self.env.road_tile_size/2
+        s = (-k/2, k/2)
+        r = lambda: random.random()*random.choice(s)
+        for i, t in enumerate(self.env.grid):
+            if (t["kind"] == "floor") and (random.random() > 0.5):
+                x, y = t["coords"]
+                random.choice(f)(x*self.env.road_tile_size+k+r(), y*self.env.road_tile_size+k+r())
+            elif (t["kind"] in self.env.road_tiles) and (random.random() > 0.67):
+                x, y = t["coords"]
+                px, py = self.env.tile_position(x, y, centered = True)
+                random.choice(g)(px+random.random()*k*0.67, py+random.random()*k*0.67)
+
+        self.env.start_pose = self.env.random_road_pose()
+        self.env.random_reset()
 
     def get_pwm_control(self, v: float, w: float)-> (float, float):
         ''' Takes velocity v and angle w and returns left and right power to motors.'''
@@ -78,12 +83,13 @@ class Agent:
 class DataAgent(Agent):
     def __init__(self, environment):
         ''' Initializes agent '''
-        super().__init__(environment, randomize = False)
+        super().__init__(environment, randomize = True)
 
         self.C = 6
 
         self.images = []
         self.labels = []
+        self.paused = False
 
     def preprocess(self) -> float:
         '''Returns the metric to be used as signal for the PID controller.'''
@@ -99,8 +105,18 @@ class DataAgent(Agent):
         velocity = 0.2
         rotation = -3.5*t
 
-        self.images.append(cv2.resize(self.env.front(), (80, 60)))
-        self.labels.append((velocity, rotation))
+        if self.key_handler[key.W]:
+            velocity = 0.2
+        if self.key_handler[key.A]:
+            rotation = 0.8
+        if self.key_handler[key.S]:
+            velocity = 0.0
+        if self.key_handler[key.D]:
+            rotation = -0.8
+
+        if not self.paused:
+            self.images.append(cv2.resize(self.env.front(), (80, 60)))
+            self.labels.append((velocity, rotation))
 
         pwm_left, pwm_right = self.get_pwm_control(velocity, rotation)
         self.env.step(pwm_left, pwm_right)
@@ -110,8 +126,9 @@ class DataAgent(Agent):
 class EvaluationAgent(Agent):
     def __init__(self, environment):
         ''' Initializes agent '''
-        super().__init__(environment, randomize = False)
-        self.pose_estimator = EvaluationAgent.load_regression_model("assignments/regression-cnn/cnn_lane_pos_estimation.h5")
+        super().__init__(environment, randomize = True)
+        # self.pose_estimator = EvaluationAgent.load_regression_model("assignments/regression-cnn/cnn_lane_pos_estimation.h5")
+        self.pose_estimator = EvaluationAgent.load_regression_model("/tmp/cnn.h5")
         self.score = 0
 
     @staticmethod
@@ -141,7 +158,7 @@ class EvaluationAgent(Agent):
         self.env.render(text = f", score: {self.score:.3f}")
 
 def main():
-    print("MAC0318 - Assignment 9")
+    print("MAC0318 - Assignment 10")
     env = create_env(
         raw_motor_input = True,
         noisy = True,
@@ -183,6 +200,11 @@ def main():
             if (symbol == key.E) and (key.E not in agents): agents[key.E] = EvaluationAgent(env)
             agent = agents[symbol]
             pyglet.clock.schedule_interval(agent.send_commands, 1.0 / env.unwrapped.frame_rate)
+        elif symbol == key.R:
+            agent.randomize()
+        elif (symbol == key.P) and isinstance(agent, DataAgent):
+            agent.paused = not agent.paused
+            print("Data collection is:", "paused" if agent.paused else "unpaused")
 
         env.render() # show image to user
 
