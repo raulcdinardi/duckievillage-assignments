@@ -18,7 +18,7 @@ Antes de implementar sua solução, recomendamos fortemente que você leia e rep
 ### Coletando os dados
 
 Você precisará de dois comportamentos diferentes: um para coletar dados (que serão usados para treinar uma rede neural convolucional) e outro para implementar o agente seguidor de pista usando a rede aprendida. Para isso, o arquivo [agent.py](./agent.py) contém duas classes de agentes: `DataAgent` e `EvaluationAgent`. A primeira classe deve ser utilizada para a coleta de dados necessários para treinar nosso
-modelo, enquanto que o outro avaliará a rede treinada. Para isso, seu agente `DataAgent` deve implementar um seguidor de pista usando [controle PID](../pid-control) e coletar um conjunto de dados de imagens da câmera rotuladas com as respectivas ações (velocidade linear $`v`$ e velocidade angular $ `\omega`$) enviadas pelo controlador.
+modelo, enquanto que o outro avaliará a rede treinada. Para isso, seu agente `DataAgent` deve implementar um seguidor de pista usando [controle PID](../pid-control) e coletar um conjunto de dados de imagens da câmera rotuladas com as respectivas ações (velocidade linear $`v`$ e velocidade angular $`\omega`$) enviadas pelo controlador.
 
 **Note que o código fornecido do agente `DataAgent` implementa um controlador proporcional simples, que possui comportamento oscilatório nas curvas. Você deve subsituir esse controlador pelo seu [controlador PID](../pid-control) desenvolvido anteriormente.**
 
@@ -78,4 +78,4 @@ Após o treino, compare seu agente em situações aleatorizadas (`randomize = Tr
 
 ### Submissão
 
-Submeta o arquivo agent.py no edisciplinas. Como o edisciplinas possuem um limite de arquivos, não é possível submeter o arquivo da rede neural. Para que possamos avaliar sua solução, coloque todos os arquivos adicionais necessários (por exemplo, o arquivo `.hp5` contendo a rede) em uma pasta no seu Google Drive e mencione o link no cabeçalho do arquivo `agent.py` submetido.
+Submeta o arquivo `agent.py` no e-disciplinas. Como o edisciplinas possuem um limite de arquivos, não é possível submeter o arquivo da rede neural. Para que possamos avaliar sua solução, coloque todos os arquivos adicionais necessários (por exemplo, o arquivo `.hp5` contendo a rede) em uma pasta no seu Google Drive e mencione o link no cabeçalho do arquivo `agent.py` submetido.
