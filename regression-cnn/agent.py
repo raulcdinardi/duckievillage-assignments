@@ -55,7 +55,7 @@ class Agent:
             self.env.domain_rand = True
             self.env.color_sky = [random.random(), random.random(), random.random()]
             self.env.color_ground = (random.random(), random.random(), random.random())
-            self.env.start_pose = self.random_road_pose()
+            self.env.start_pose = self.env.random_road_pose()
             self.env.random_reset()
 
         key_handler = key.KeyStateHandler()
