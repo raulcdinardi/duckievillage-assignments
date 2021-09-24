@@ -2,66 +2,68 @@
 
 ## Atividade 9 - Seguidor de pista com redes neurais convolucionais
 
-Nessa atividade, você deve implementar um agente seguidor de pista de forma similar ao da
-[atividade anterior](../regression). Na tarefa anterior, você implementou um seguidor de pista
-através de uma rede neural como módulo de percepção, usando dados já coletados préviamente para
-predizer o sinal de controle $`y=C\cdot d+\alpha`$, onde $`d`$ é a distância do robô até a faixa a
-ser seguida e $`\alpha`$ é a diferença entre o ângulo do carrinho e da faixa, a partir de uma
-imagem. O sinal $`y`$ é então repassado ao controlador, que decide a velocidade linear e angular do
-carrinho.
+Na [atividade anterior](../regression/), você deve implementou um controlador PID seguidor de pista que usava uma rede neural para estimar o valor de saída do sistema  $`y=6d+\alpha`$, onde $`d`$ e $`\alpha`$ são mostrados na figura abaixo.
 
-Nesta atividade, ao invés de separarmos o agente em módulo de percepção e controle, iremos usar um
-modelo de rede neural convolucional para predizer as velocidades diretamente da imagem. Para isso,
-precisaremos coletar os dados para predição.
+<figure style="text-align: center">
+   <img src="img/lane_following2.png" width=400>
+</figure>
 
-### Coletando dados
+A rede neural construída usava apenas camadas densas, e foi aprendida a partir de um conjunto de capturas da imagens da camera do robô (simulado) pré-processadas e rotulas com seus respectivos valores $`y`$.
 
-Você usará duas classes de agente no arquivo [agent.py](./agent.py): `DataAgent` e
-`EvaluationAgent`. O primeiro será utilizado para coletar os dados necessários para treinar nosso
-modelo, enquanto que o outro avaliará a rede treinada. O agente `DataAgent` percorrerá o circuito
-de forma automática (igual a atividade de [Controle PID](../pid-control)) e ao mesmo tempo
-coletará as imagens vistas pelo robô e as ações/velocidades dadas pelo controlador, que agirão como
-rótulos.
+Nesta atividade, ao invés de separarmos o agente em módulo de percepção (estimação de saída) e controle, iremos usar um
+modelo de rede neural convolucional para predizer as velocidades diretamente a partir da imagem. Além disso, deixaremos a curadoria de um conjunto de dados apropriado a seu encargo. 
 
-A princípio, `DataAgent` vem apenas com um controlador proporcional simples. Isso quer dizer que as
-predições do nosso eventual modelo terão como base o comportamento de um controlador simples, que é
-altamente oscilatório nas curvas. Para que nosso modelo prediga as trajetórias de forma mais suave,
-precisamos usar um controlador PID. Use o seu controlador PID da atividade de
-[Controle PID](../pid-control) para gerar os dados.
+Antes de implementar sua solução, recomendamos fortemente que você leia e replique as atividades nos notebooks fornecidos sobre [Aprendizado de características](./Aprendizado de características.ipynb) e [redes neurais convolucionais](./Redes Neurais Convolucionais.ipynb).
 
-**Observação:** é importante que os dados contenham poses variadas, e não apenas aquelas vistas
-pelo controlador em seu trajeto "ideal". Você pode manualmente guiar o robô para poses que o agente
-não veria normalmente, mas não se esqueça de gravar apenas as ações que o controlador tomaria, e
-não as ações manuais que levam o robô para fora do ideal.
+### Coletando os dados
 
-O método `DataAgent.send_commands` redimensiona as imagens para $`80\times 60`$, rotulando cada
-imagem com a velocidade linear e angular. A função `on_key_press` salva as imagens e rótulos com o
-pressionar do botão `ESC`.
+Você precisará de dois comportamentos diferentes: um para coletar dados (que serão usados para treinar uma rede neural convolucional) e outro para implementar o agente seguidor de pista usando a rede aprendida. Para isso, o arquivo [agent.py](./agent.py) contém duas classes de agentes: `DataAgent` e `EvaluationAgent`. A primeira classe deve ser utilizada para a coleta de dados necessários para treinar nosso
+modelo, enquanto que o outro avaliará a rede treinada. Para isso, seu agente `DataAgent` deve implementar um seguidor de pista usando [controle PID](../pid-control) e coletar um conjunto de dados de imagens da câmera rotuladas com as respectivas ações (velocidade linear $`v`$ e velocidade angular $ `\omega`$) enviadas pelo controlador.
+
+**Note que o código fornecido do agente `DataAgent` implementa um controlador proporcional simples, que possui comportamento oscilatório nas curvas. Você deve subsituir esse controlador pelo seu [controlador PID](../pid-control) desenvolvido anteriormente.**
+
+
+**Instruções:** Você deve projetar uma estratégia de coleta de imagens a fim de obter um conjuto de dados relevante e de tamanho adequado (nem muito pequeno, nem muito grande). Alguns aspectos a serem considerados
+
+- O conjunto deve conter variabilidade suficiente para que o modelo aprendido **generalize** bem a imagens fora do conjunto de treino. Isso quer dizer que você deve obter dados de poses variadas e bem distribuídas -- por exemplo, imagens em linhas retas (muito mais abundantes) devem ser equilibradas com imagens em curvas; outra questão é coletar "frames" espaços no tempo, pois frames temporalmente próximos fornecem pouca novidade um em relação ao outro.
+
+- É importante considerar comportamentos fora da operação ideal, para que seu agente aprendido saiba se recuperar de erros; ou seja, você deve obter imagens de poses fora do trajeto ideal do robô. Você pode fazer isso guiando manualmente o robô para poses que o agente com o controlador PID 
+não alcançaria normalmente (mas não se esqueça de gravar apenas as ações que o controlador tomaria e
+não as ações manuais que levam o robô para fora da posição desejada).
+
+- É possível que você precise alternar entre coleta de dados e aprendizado para avaliar a qualidade dos dados obtidos e investigar possíveis melhorias (por exemplo, observando as imagens nas quais o modelo apresenta o maior erro de predição, e aumentando o conjunto de dados com imagens similares).
+
+O método `DataAgent.send_commands` redimensiona as imagens para o tamanho $`80\times 60`$ pixels e rotula cada
+imagem com a velocidade linear e angular. A função `on_key_press` salva as imagens e rótulos com o pressionar do botão `ESC`.
+Você tem liberdade para alterar essa estratégia de captura de dados, de tamanho da imagem a forma como os dados são coletados.
 
 ### Treinando seu modelo
 
-Agora que temos os dados, podemos aprender nosso modelo. Treine uma rede neural convolucional que
-toma como entrada imagens coloridas $`80\times 60`$ e retorna ambas as velocidades a serem atuadas no
-agente. Use a classe `EvaluationAgent` para avaliar seu escore.
+Assim que você tiver um conjuto de dados adequado, você deve treinar uma modelo para prever as velocidades (sinais de controle) a partir das imagens. 
+Construa e otimize uma rede neural convolucional que toma como entrada imagens coloridas (possivelmente no tamanho $`80 \times 60`$) e prediz as velocidades do agente. Recomendamos realizar esse processo de aprendizado usando um notebook do [Google Collab](http://colab.research.google.com/). Lembre-se de utilizar a metodologia vista em sala (separação treino-teste) e salvar o modelo aprendido.
+
+Quando estiver satisfeito com o desempenho do seu modelo, implemente o agente seguidor na classe `EvaluationAgent`.
+Essa classe fornece uma pontuação pela variável `self.score` que avalia a qualidade da trajetória executada pelo seu agente (em relação ao centro da pista). Você pode usar essa pontuação para comparar diferentes modelos preditores.
 
 ### Verificando a robustez
 
-Com o modelo pronto, mude a seguinte linha do construtor da classe `EvaluationAgent`
+Após obter um comportamento de seguidor de linha satisfatório, altere a seguinte linha do construtor da classe `EvaluationAgent`
 
 ```python
 super().__init__(environment, randomize = False)
 ```
 
-por
+para
 
 ```python
 super().__init__(environment, randomize = True)
 ```
 
-Agora, execute novamente o seu modelo. Note que o modelo que funcionava anteriormente mal consegue
-seguir uma reta. Isso acontece pois sua rede estava correlacionando a cor da grama com as
-velocidades a serem seguidas. Porém, no nosso caso, a cor da grama é irrelevante para as ações do
-agente.
+Execute novamente o seu agente após a mudança. Você deve observar uma piora significativa do comportamento do agente.
+Isso acontece pois sua rede estava usando informações espúrias como a cor da grama para predizer as ações de controle. 
+Algo similar acontece com carros autônomos em situações reais; por exemplo, a cor do céu, que é uma informação utilizada para prever a linha do horizonte, normalmente se apresenta dentro de uma gama de cores limitadas (azul a branco). No entanto, em condições muito específicas (como em cidaddes próximas a incêndios), o céu pode exibir uma cor inesperada e ser confundido com outra parte da cena. Por exemplo, a imagem abaixo 
+retrata uma cidade na Califórnia durante os incêndios de 2020. É razoável (e particularmente
+desejável) esperar que o carro continue funcionando durante situações incomuns como esta.
 
 <figure>
   <div style="text-align:center;">
@@ -70,12 +72,10 @@ agente.
   </div>
 </figure>
 
-A invariância da cor em certos casos é importante para direção autônoma, afinal a performance de um
-carro autônomo deveria se manter alta no caso de algum evento externo. Por exemplo, a imagem acima
-mostra as ruas de uma cidade na Califórnia após os incêndios de 2020. É razoável (e especialmente
-desejável) esperar que o carro continue funcionando durante o apocalipse.
+Para obter um agente robusto a mudanças do tipo de cobertura do solo fora da pista (que é algo que não esperamos ter uma grande variabilidade), mude a mesma linha de código acima no construtor da classe `DataAgent` e colete mais dados com ambiente "aleatorizados". 
+Incorpore os novos dados aos conjunto de dados anteriores e retreine o modelo. 
+Após o treino, compare seu agente em situações aleatorizadas (`randomize = True`) e "normais" (`randomize = False`).
 
-Faça a mesma mudança no construtor da classe `DataAgent` e colete mais dados do ambiente desta vez
-aleatorizado. Concatene os dados coletados antes da aleatorização com os coletados agora e retreine
-o modelo. Avalie novamente em ambas as situações aleatorizadas (`randomize = True`) e normais
-(`randomize = False`).
+### Submissão
+
+Submeta o arquivo agent.py no edisciplinas. Como o edisciplinas possuem um limite de arquivos, não é possível submeter o arquivo da rede neural. Para que possamos avaliar sua solução, coloque todos os arquivos adicionais necessários (por exemplo, o arquivo `.hp5` contendo a rede) em uma pasta no seu Google Drive e mencione o link no cabeçalho do arquivo `agent.py` submetido.
