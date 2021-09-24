@@ -1,17 +1,17 @@
 # MAC0318 Introdução à Programação de Robôs Móveis
 
-## Atividade 9 - Seguidor de pista com redes neurais convolucionais
+## Atividade 9 - Controlador seguidor de pista por redes neurais convolucionais
 
-Na [atividade anterior](../regression/), você deve implementou um controlador PID seguidor de pista que usava uma rede neural para estimar o valor de saída do sistema  $`y=6d+\alpha`$, onde $`d`$ e $`\alpha`$ são mostrados na figura abaixo.
+Na [atividade anterior](../regression/), você implementou um agente seguidor de pista que usava uma rede neural para estimar o valor de saída do sistema $`y=6d+\alpha`$, onde $`d`$ e $`\alpha`$ são mostrados na figura abaixo. A estimativa de $`y`$ era então usada por um controlador PID [implementado anteriormente](./pid-control).
 
 <figure style="text-align: center">
    <img src="img/lane_following2.png" width=400>
 </figure>
 
-A rede neural construída usava apenas camadas densas, e foi aprendida a partir de um conjunto de capturas da imagens da camera do robô (simulado) pré-processadas e rotulas com seus respectivos valores $`y`$.
+A rede neural construída usava apenas camadas densas, e foi aprendida a partir de um conjunto fornecido de capturas da imagens da camera do robô (simulado) pré-processadas e rotuladas com seus respectivos valores $`y`$. Esse tipo de abordagem é conhecida como [servocontrolador visual baseado em posição](https://en.wikipedia.org/wiki/Visual_servoing). 
 
 Nesta atividade, ao invés de separarmos o agente em módulo de percepção (estimação de saída) e controle, iremos usar um
-modelo de rede neural convolucional para predizer as velocidades diretamente a partir da imagem. Além disso, deixaremos a curadoria de um conjunto de dados apropriado a seu encargo. 
+modelo de rede neural convolucional para predizer as velocidades diretamente a partir da imagem. Isto é, contruíremos um servocontrolador visual baseado em imagens. Além disso, deixaremos a construção do conjunto de dados rotulados a seu encargo. 
 
 Antes de implementar sua solução, recomendamos fortemente que você leia e replique as atividades nos notebooks fornecidos sobre [Aprendizado de características](./Aprendizado de características.ipynb) e [redes neurais convolucionais](./Redes Neurais Convolucionais.ipynb).
 
@@ -43,7 +43,7 @@ Assim que você tiver um conjuto de dados adequado, você deve treinar uma model
 Construa e otimize uma rede neural convolucional que toma como entrada imagens coloridas (possivelmente no tamanho $`80 \times 60`$) e prediz as velocidades do agente. Recomendamos realizar esse processo de aprendizado usando um notebook do [Google Collab](http://colab.research.google.com/). Lembre-se de utilizar a metodologia vista em sala (separação treino-teste) e salvar o modelo aprendido.
 
 Quando estiver satisfeito com o desempenho do seu modelo, implemente o agente seguidor na classe `EvaluationAgent`.
-Essa classe fornece uma pontuação pela variável `self.score` que avalia a qualidade da trajetória executada pelo seu agente (em relação ao centro da pista). Você pode usar essa pontuação para comparar diferentes modelos preditores.
+Essa classe fornece uma pontuação pela variável `self.score` que avalia a qualidade da trajetória executada pelo seu agente (em relação ao centro da pista). Você pode usar essa pontuação para comparar diferentes modelos preditores. Em nossos testes, um bom agente obteve pontuação entre 0,98 e 1,1; um agente ruim mas que seguia na pista ficou com pontuação entre 0,7 e 0,85. Já uma pontuação negativa indicava um agente que não permanecia na pista.
 
 ### Verificando a robustez
 
