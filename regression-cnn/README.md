@@ -11,7 +11,7 @@ Na [atividade anterior](../regression/), você implementou um agente seguidor de
 A rede neural construída usava apenas camadas densas, e foi aprendida a partir de um conjunto fornecido de capturas da imagens da camera do robô (simulado) pré-processadas e rotuladas com seus respectivos valores $`y`$. Esse tipo de abordagem é conhecida como [servocontrolador visual baseado em posição](https://en.wikipedia.org/wiki/Visual_servoing). 
 
 Nesta atividade, ao invés de separarmos o agente em módulo de percepção (estimação de saída) e controle, iremos usar um
-modelo de rede neural convolucional para predizer as velocidades diretamente a partir da imagem. Isto é, contruíremos um servocontrolador visual baseado em imagens. Além disso, deixaremos a construção do conjunto de dados rotulados a seu encargo. 
+modelo de rede neural convolucional para predizer as velocidades diretamente a partir da imagem, com mínimo pré-processamento (isso é chamado de aprendizado fim-a-fim, ou _end-to-end_). Isto é, contruíremos um servocontrolador visual baseado em imagens a partir dos valores dos pixels em RGB. Além disso, deixaremos a construção do conjunto de dados rotulados a seu encargo. 
 
 Antes de implementar sua solução, recomendamos fortemente que você leia e replique as atividades nos notebooks fornecidos sobre [Aprendizado de características](./Aprendizado de características.ipynb) e [redes neurais convolucionais](./Redes Neurais Convolucionais.ipynb).
 
@@ -39,8 +39,8 @@ Você tem liberdade para alterar essa estratégia de captura de dados, de tamanh
 
 ### Treinando seu modelo
 
-Assim que você tiver um conjuto de dados adequado, você deve treinar uma modelo para prever as velocidades (sinais de controle) a partir das imagens. 
-Construa e otimize uma rede neural convolucional que toma como entrada imagens coloridas (possivelmente no tamanho $`80 \times 60`$) e prediz as velocidades do agente. Recomendamos realizar esse processo de aprendizado usando um notebook do [Google Collab](http://colab.research.google.com/). Lembre-se de utilizar a metodologia vista em sala (separação treino-teste) e salvar o modelo aprendido.
+Assim que você tiver um conjuto de dados adequado, você deve treinar uma modelo para prever as velocidades (sinais de controle) a partir das imagens, **sem realizar a segmentação por cores** (você ainda pode redimensioná-las e descartar a porção acima do horizonte para diminuir o custo computacional). 
+Construa e otimize uma rede neural convolucional que toma como entrada imagens coloridas em RGB (possivelmente no tamanho $`80 \times 60`$) e prediz o sinais de comanda de velocidades do agente. Recomendamos realizar esse processo de aprendizado usando um notebook do [Google Collab](http://colab.research.google.com/). Lembre-se de utilizar a metodologia vista em sala (separação treino-teste) e salvar o modelo aprendido.
 
 Quando estiver satisfeito com o desempenho do seu modelo, implemente o agente seguidor na classe `EvaluationAgent`.
 Essa classe fornece uma pontuação pela variável `self.score` que avalia a qualidade da trajetória executada pelo seu agente (em relação ao centro da pista). Você pode usar essa pontuação para comparar diferentes modelos preditores. Em nossos testes, um bom agente obteve pontuação entre 0,98 e 1,1; um agente ruim mas que seguia na pista ficou com pontuação entre 0,7 e 0,85. Já uma pontuação negativa indicava um agente que não permanecia na pista.
@@ -75,6 +75,8 @@ desejável) esperar que o carro continue funcionando durante situações incomun
 Para obter um agente robusto a mudanças do tipo de cobertura do solo fora da pista (que é algo que não esperamos ter uma grande variabilidade), mude a mesma linha de código acima no construtor da classe `DataAgent` e colete mais dados com ambiente "aleatorizados". 
 Incorpore os novos dados aos conjunto de dados anteriores e retreine o modelo. 
 Após o treino, compare seu agente em situações aleatorizadas (`randomize = True`) e "normais" (`randomize = False`).
+
+**Opcional:** você pode repetir o aprendizado realizando a segmentação por cores (extração de características) antes de passar as imagens pela rede. Compare nesse caso a redução de desempenho do modelo aprendido nos mundos não aleatórizados quando implementado no mundo aleatorizado. 
 
 ### Submissão
 
