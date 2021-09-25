@@ -59,6 +59,13 @@ para
 super().__init__(environment, randomize = True)
 ```
 
+Essas alterações fazem com que a cobertura do solo seja alterada para exibir um padrão de preenchimento arbitrário, como nas figuras abaixo.
+
+<figure style="text-align: center">
+   <img src="img/randomized1.png" width=300>
+   <img src="img/randomized2.png" width=300>
+</figure>
+
 Execute novamente o seu agente após a mudança. Você deve observar uma piora significativa do comportamento do agente.
 Isso acontece pois sua rede estava usando informações espúrias como a cor da grama para predizer as ações de controle. 
 Algo similar acontece com carros autônomos em situações reais; por exemplo, a cor do céu, que é uma informação utilizada para prever a linha do horizonte, normalmente se apresenta dentro de uma gama de cores limitadas (azul a branco). No entanto, em condições muito específicas (como em cidaddes próximas a incêndios), o céu pode exibir uma cor inesperada e ser confundido com outra parte da cena. Por exemplo, a imagem abaixo 
