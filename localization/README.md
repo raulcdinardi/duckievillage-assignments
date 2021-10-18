@@ -36,6 +36,20 @@ com $`\epsilon_l`$ e $`\epsilon_r`$ representando os erros aleatórios no movime
 
 Vamos assumir que a observação $`Y`$ é a saída da rede neural a partir de uma imagem de captura da câmera fronta. Dessa forma, o modelo do sensor $`p(y|x)`$ pode ser modelado por uma gaussiana cuja média é o valor real $`x=6d+\alpha`$ e a variância pode ser estimada a partir do conjunto de teste (usando a variância do erro dado pela difernça entre a saída da rede e o valor real).
 
-Você deve usar a moda da crença $`p(X_t)`$ como sinal para o controlador. 
+Você deve usar a moda da crença $`p(X_t)`$ como sinal para o controlador.
 
 **Nota:** Como o controlador usa apenas o valor agregado $`y=6d + \alpha`$, que é a mesmo quantidade estimada pelo sensor, alternativamente é possível implementar um filtro 1D assumindo que o estado é também $`x=6d + \alpha`$. A distribuição de transição $`p(6d_{t+1} + \alpha_{t+1}|6d_t + \alpha_t)`$ pode ser obtida a partir da matriz de transição para os centróides 2D como $`p(x=6d+\alpha)=\sum_{d,\alpha} p(x|d,\alpha)p(d,\alpha)`$ onde a soma é realizada sobre os valores dos centróides $`d`$ e $`\alpha`$ e $`p(d,\alpha)`$ são os valores em 2D. 
+
+Recomendamos que você leia o Jupyter Notebook sobre [Filtro Bayesiano](https://gitlab.uspdigital.usp.br/mac0318-2021/assignments/-/blob/master/localization/Filtro%20Bayesiano.ipynb) primeiro. Usando a notação do notebook, note que nosso estado é dado por $`X=(d,\alpha)`$ (que equivale à pose do robô), e as observações $`Y`$ são as saídas da rede dadas as imagens frontais. Você deve implementar as funções $`correct`$ e $`predict`$ de forma similar ao Notebook. No esqueleto são dadas as discretizações em células de $`6d+\alpha`$ a partir do conjunto de dados de treino, assim como a estimação das gaussianas para cada célula. Use os vetores `cells` e `gaussians` para computar
+
+```math
+\tilde{\text{bel}}_{t+1}(x)=p(Y|X=x)\text{bel}_t(x)
+```
+
+na função `correct` e
+
+```math
+\text{bel}_{t+1}(x') = \sum_x P(X_{t+1}=x' | X_t=x, u, \delta t) \text{bel}_t(x)
+```
+
+na função `predict`.
