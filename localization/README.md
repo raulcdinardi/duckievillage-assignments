@@ -49,7 +49,10 @@ Recomendamos que você leia o Jupyter Notebook sobre [Filtro Bayesiano](https://
 na função `correct` e
 
 ```math
-\text{bel}_{t+1}(x') = \sum_x P(X_{t+1}=x' | X_t=x, u, \delta t) \text{bel}_t(x)
+\text{bel}_{t+1}(x') = \sum_x p(X_{t+1}=x' | X_t=x, u, \Delta t) \text{bel}_t(x)
 ```
 
-na função `predict`.
+na função `predict` assumindo que $p(Y|X=x)$ é dado por uma gaussiana de $`6d+\alpha`$ centrada na
+célula dada por $`x`$ (estimada em `gaussians`), e $p(X_{t+1}=x'|X_t=x,u,\Delta t)$ é uma gaussiana
+centrada em $`x`$ após aplicada a ação $`u`$ em um intervalo de tempo $`\Delta t`$ (e portanto a
+nova pose relativa se assumirmos nenhum erro) e com variância fixa.
