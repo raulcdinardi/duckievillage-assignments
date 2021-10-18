@@ -10,10 +10,10 @@ Como nas atividades anteriores, o estado representará a pose relativa do agente
 ```math
 X = \begin{pmatrix} d \\ \alpha \end{pmatrix}
 ```
-O modelo de transição $`p(x_{t+1}|x_{t}, u=(\omega,v))`$ é portanto fornecido pela equação
+O modelo de transição $`p(x_{t+\Delta t}|x_{t}, u=(\omega,v))`$ é portanto fornecido pela equação
 ```math
 \begin{bmatrix}
- d_{t+1} \\ \alpha_{t+1}
+ d_{t+\Delta t} \\ \alpha_{t+\Delta t}
 \end{bmatrix}
 =
 \begin{bmatrix}
