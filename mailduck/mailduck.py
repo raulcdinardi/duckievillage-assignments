@@ -1,23 +1,3 @@
-# MAC0318 Intro to Robotics
-# Please fill-in the fields below with your info
-#
-# Name:
-# NUSP:
-#
-# ---
-#
-# Final Project - The Travelling Mailduck Problem
-#
-# Don't forget to run this file from the Duckievillage root directory path (example):
-#   cd ~/MAC0318/duckievillage
-#   conda activate duckietown
-#   python3 assignments/mailduck/mailduck.py
-#
-# Submission instructions:
-#  0. Add your name and USP number to the file header above.
-#  1. Make sure that any last change hasn't broken your code. If the code crashes without running you'll get a 0.
-#  2. Submit this file via e-disciplinas.
-
 import sys
 import pyglet
 from pyglet.window import key
@@ -44,6 +24,7 @@ def main():
         mailbox_file = sys.argv[1],
         enable_mailbox = True,
         enable_eval = True,
+        enable_topomap = True,
         draw_curve = False,
         draw_bbox = False,
         domain_rand = False,
@@ -52,6 +33,8 @@ def main():
         cam_height = 10,
         is_external_map = True,
         randomize_maps_on_reset = False,
+        # To record your agent, set the variable below to some file path. It must end in ".mp4".
+        video_path = None,
     )
 
     env.set_view(FRONT_VIEW_MODE)

@@ -1,3 +1,23 @@
+# MAC0318 Intro to Robotics
+# Please fill-in the fields below with your info
+#
+# Name:
+# NUSP:
+#
+# ---
+#
+# Final Project - The Travelling Mailduck Problem
+#
+# Don't forget to run this file from the Duckievillage root directory path (example):
+#   cd ~/MAC0318/duckievillage
+#   conda activate duckietown
+#   python3 assignments/mailduck/mailduck.py
+#
+# Submission instructions:
+#  0. Add your name and USP number to the file header above.
+#  1. Make sure that any last change hasn't broken your code. If the code crashes without running you'll get a 0.
+#  2. Submit this file via e-disciplinas.
+
 import pyglet
 from pyglet.window import key
 import numpy as np
@@ -14,6 +34,7 @@ class Agent:
         self.baseline = env.unwrapped.wheel_dist/2
         self.motor_gain = 0.68*0.0784739898632288
         self.motor_trim = 0.0007500911693361842
+        self.initial_pos = env.get_position()
 
         key_handler = key.KeyStateHandler()
         env.unwrapped.window.push_handlers(key_handler)
