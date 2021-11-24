@@ -113,9 +113,7 @@ mundo.
 
 **Importante:** lembre-se que não temos acesso a nossa posição. Depois que saímos da pose inicial,
 existe uma incerteza (alta) de qual é nossa pose real. Faz parte do projeto implementar algum tipo
-de localização. Uma sugestão é usar as ideias da atividade de localização para atribuir
-probabilidades para cada nó do grafo. Desta forma, teríamos uma crença de onde estamos em cada
-possível trecho de rua.
+de localização.
 
 A terceira informação disponível a vocês é se a entrega do pacote foi bem-sucedida. Para isso,
 vocês usarão o método `Mailbox.deliver`, como o exemplo abaixo mostra.
