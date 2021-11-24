@@ -67,6 +67,13 @@ Para guiar o robô em suas entregas e conseguirmos completar a missão do Patob�
 a três informações observáveis. A primeira é a posição inicial. Ela estará salva como uma variável
 de instância de `Agent` com nome `initial_pos`, inicialmente inicializada no construtor da classe.
 
+```python
+self.initial_pos = env.get_position() # em Agent.__init__:agent.py
+```
+
+Lembre-se que apesar de usarmos `env.get_position()` neste trecho, seu uso no resto do código é
+proibido.
+
 A segunda é o mapa topológico da cidade. Diferentemente da tarefa de planejamento de rotas, o mapa
 topológico que usaremos é um grafo não-direcionado sem ponderações nas arestas. Cada nó é um
 segmento reto de rua, curva ou intersecção. Uma aresta entre dois nós indica se as duas partes de
@@ -95,12 +102,20 @@ e = G.edge(N[0], N[1]) # retorna True se existe uma aresta entre N[0] e N[1]; Fa
 v = G.closest_node((0.5, 1.5)) # retorna o nó mais próximo da posição (0.5, 1.5)
 
 p, q = (0.5, 1.5), (3, 2.5)
-W = G.path(p, q) # retorna uma lista de posições a serem seguidas para ir de p até q
+W = G.path(p, q) # retorna uma lista de posições a serem seguidas para ir do nó mais próximo de p até o nó mais próximo de q
 ```
 
 Aqui nos interessa o método `G.path`, que faz uma busca no grafo para retornar o caminho ótimo de
 um ponto a outro. Vocês podem usar esta informação para planejar a sua rota de entrega.  Cada nó é,
-internamente, indexado por uma tupla $`(x,y)`$ representando a posição do nó no mundo.
+internamente, indexado por uma tupla $`(x,y)`$ representando a posição do nó no mundo. O método
+`G.nodes` retorna uma lista contendo os nós do grafo como tuplas representando suas posições no
+mundo.
+
+**Importante:** lembre-se que não temos acesso a nossa posição. Depois que saímos da pose inicial,
+existe uma incerteza (alta) de qual é nossa pose real. Faz parte do projeto implementar algum tipo
+de localização. Uma sugestão é usar as ideias da atividade de localização para atribuir
+probabilidades para cada nó do grafo. Desta forma, teríamos uma crença de onde estamos em cada
+possível trecho de rua.
 
 A terceira informação disponível a vocês é se a entrega do pacote foi bem-sucedida. Para isso,
 vocês usarão o método `Mailbox.deliver`, como o exemplo abaixo mostra.
@@ -172,15 +187,34 @@ python3 assignments/mailduck/mailduck.py mylist.mail
 
 ### Entrega
 
-Vocês devem entregar os seguintes itens para o projeto final:
+A entrega é dividida em duas datas. Em **24/12/2021**, vocês devem entregar:
 
 1. Seu código `agent.py`;
 2. Quaisquer materiais, dados, redes neurais, etc. que são necessários para executar o código;
-3. Um vídeo do seu agente executando pelo menos um dos casos em [examples](./examples).
 
-Para o item (3), vocês podem utilizar a gravação automática por meio da variável de construção
-`video_path` na criação do ambiente em [mailduck.py](./mailduck.py).
+Em **10/01/2022**, vocês devem entregar:
 
-<br>
+3. Um vídeo de aproximadamente 15 minutos explicando a sua solução.
+
+O item (3) deve ser um vídeo detalhando a sua solução, como você resolveu cada problema
+(planejamento de rotas, navegação, localização, etc.), e o que cada pessoa do grupo fez no projeto.
+Também deve mostrar exemplos de execução. Para este último, vocês podem utilizar a gravação
+automática do simulador por meio da variável de construção `video_path` na criação do ambiente em
+[mailduck.py](./mailduck.py).
+
+Os vídeos de todos os grupos serão apresentados durante a aula no dia **17/01/2022**.
+
+### Bônus
+
+Além das infrações, o relatório do Patobô também contém uma medição de energia usada pelo robô
+proporcional à distância percorrida durante todas as entregas. Como signatária da COP26, Patolândia
+está comprometida para a redução de gastos de energia, e isso inclue o Patobô. O time de Patobô que
+for mais eficiente nos casos de teste ganhará +1.0 de bônus na nota do projeto!
+
+### Comunicação entre grupos
+
+Os grupos não devem compartilhar informações de suas soluções. Porém, é permitido compartilhar os
+vídeos de execução dos seus agentes entre grupos. Além disso, cada grupo terá um canal de voz no
+Discord em que apenas seus integrantes (e monitor + docentes caso hajam dúvidas) terão acesso.
 
 **Boa sorte e bom trabalho! Patolândia conta com vocês!**

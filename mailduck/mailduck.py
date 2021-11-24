@@ -25,6 +25,7 @@ def main():
         enable_mailbox = True,
         enable_eval = True,
         enable_topomap = True,
+        enable_mileage = True,
         draw_curve = False,
         draw_bbox = False,
         domain_rand = False,
@@ -44,10 +45,12 @@ def main():
     @env.unwrapped.window.event
     def on_key_press(symbol, modifiers):
         if symbol == key.ESCAPE: # exit simulation
+            print("Energy usage:", env.mileage.mileage())
             # Dump log to file
             with open("/tmp/output.txt", 'w') as file:
                 for k in env.eval._log:
                     for l in env.eval._log[k]: file.write(str(l[0]) + " " + str(l[1]) + '\n')
+                file.write(str(env.mileage.mileage()), "= energy usage")
             env.close()
             sys.exit(0)
 

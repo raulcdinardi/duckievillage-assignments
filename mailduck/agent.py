@@ -1,8 +1,22 @@
 # MAC0318 Intro to Robotics
-# Please fill-in the fields below with your info
+# Please fill-in the fields below with every team member info
 #
 # Name:
 # NUSP:
+#
+# Name:
+# NUSP:
+#
+# Name:
+# NUSP:
+#
+# Name:
+# NUSP:
+#
+# Any supplemental material for your agent to work (e.g. neural networks, data, etc.) should be
+# uploaded elsewhere and listed down below together with a download link.
+#
+#
 #
 # ---
 #
@@ -11,10 +25,10 @@
 # Don't forget to run this file from the Duckievillage root directory path (example):
 #   cd ~/MAC0318/duckievillage
 #   conda activate duckietown
-#   python3 assignments/mailduck/mailduck.py
+#   python3 assignments/mailduck/mailduck.py assignments/mailduck/examples/1.mail
 #
 # Submission instructions:
-#  0. Add your name and USP number to the file header above.
+#  0. Add your names and USP numbers to the file header above.
 #  1. Make sure that any last change hasn't broken your code. If the code crashes without running you'll get a 0.
 #  2. Submit this file via e-disciplinas.
 
