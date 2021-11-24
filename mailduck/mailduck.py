@@ -1,7 +1,7 @@
 import sys
 import pyglet
 from pyglet.window import key
-from duckievillage import create_env, FRONT_VIEW_MODE
+from duckievillage import create_env, FRONT_VIEW_MODE, TOP_DOWN_VIEW_MODE, FULL_VIEW_MODE
 
 from agent import Agent
 
@@ -37,6 +37,7 @@ def main():
         video_path = None,
     )
 
+    # For a top-down view of the map, change this to TOP_DOWN_VIEW_MODE. For both, FULL_VIEW_MODE.
     env.set_view(FRONT_VIEW_MODE)
     env.render()
 
@@ -52,11 +53,15 @@ def main():
 
     agent = Agent(env)
 
-    print(env.mailbox.mail())
+    track_dt = 0
 
     def loop(dt: float):
         agent.send_commands(dt)
-        env.eval.track()
+        nonlocal track_dt
+        track_dt += dt
+        if track_dt > 0.5:
+            env.eval.track()
+            track_dt = 0
         env.render()
 
     pyglet.clock.schedule_interval(loop, 1.0 / env.unwrapped.frame_rate)

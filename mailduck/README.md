@@ -2,10 +2,10 @@
 
 ## Projeto Final - O Problema do Carteiro-Pato-Robô Viajante
 
-Patolândia está em perigo. Com o aumento das compras virtuais e da pandemia de COVID, o volume de
-carga dos Correios chegou ao limite, ou seja, não há carteiros-pato suficientes para entregar todos
-os pacotes! O sistema está sobrecarregado e os índices de aprovação do atual presidente-pato não
-param de despencar. E pior: bem na véspera de um ano eleitoral!
+Patolândia está em perigo. Com o aumento das compras virtuais em virtude da pandemia de COVID, o
+volume de carga dos Correios chegou ao limite, ou seja, não há carteiros-pato suficientes para
+entregar todos os pacotes! O sistema está sobrecarregado e os índices de aprovação do atual
+presidente-pato não param de despencar. E pior: bem na véspera de um ano eleitoral!
 
 Para resolver esta crise, o Presidente Paulo Pato reuniu uma força tarefa com os melhores
 pato-engenheiros e pato-computeiros de toda Patolândia para automatizar completamente o Correios e
@@ -20,17 +20,17 @@ Esse é um trabalho para vocês, pato-computeiros.
 
 A missão é simples: **salvar Patolândia antes que o país entre em caos**.
 
-Usando o Patobô, que possue apenas dois motores para cada roda e uma câmera frontal, você deve
-entregar todas as encomendas o mais rápido possível e voltar à sua posição inicial. Para isso, você
-terá acesso a dois tipos de informação:
+Usando o Patobô, que possue apenas dois motores para cada roda e uma câmera frontal, vocês devem
+entregar todas as encomendas o mais rápido possível e voltar à sua posição inicial. Para isso,
+vocês terão acesso a dois tipos de informação:
 
 1. Sua posição inicial;
 2. Um mapa topológico da cidade; e
 3. Se a entrega de uma encomenda foi bem-sucedida.
 
-Por causa do acidente espacial do ano passado, não teremos nenhum acesso a GPS. Você terá de usar
+Por causa do acidente espacial do ano passado, não teremos nenhum acesso a GPS. Vocês terão de usar
 todas as suas habilidades de robótica e inteligência artificial para fazer a entrega apenas com as
-informações acima. Que bom que você prestou atenção em todas as aulas de MAC0318!
+informações acima. Que bom que vocês prestaram atenção em todas as aulas de MAC0318!
 
 Além disso, para não causar mais caos nas cidades, o Presidente Paulo Pato ressaltou enfaticamente
 que vocês devem seguir as três regras da pato-robótica:
@@ -44,14 +44,14 @@ vocês obedeçam as três regras acima e apenas utilizem as informações dadas.
 adicionais é proibido.
 
 O seu código deve ser implementado a partir do arquivo [agent.py](./agent.py), que contém o código
-para o agente final. Assim como nas tarefas anteriores, assume-se um erro nas rodas e portanto
+para o agente do Patobô. Assim como nas tarefas anteriores, assume-se um erro nas rodas e portanto
 temos as constantes usuais para o cálculo da modelagem `Agent.get_pwm_control`. O método
-`Agent.send_commands` é encarregado de computar as ações do agente. Você opcionalmente pode usar,
+`Agent.send_commands` é encarregado de computar as ações do agente. Vocês opcionalmente podem usar,
 assim como nas tarefas anteriores, o método `Agent.preprocess` para organizar o seu código em
 diferentes módulos de percepção e controle.
 
 **Importante:** todo o código deve ser implementado no arquivo `agent.py`, que será o único arquivo
-de código-fonte a ser entregue no e-disciplinas. No entanto, a execução da tarefa deve ser feita
+código-fonte a ser entregue no e-disciplinas. No entanto, a execução da tarefa deve ser feita
 através de [mailduck.py](./mailduck.py) por meio do comando:
 
 ```bash
@@ -99,10 +99,11 @@ W = G.path(p, q) # retorna uma lista de posições a serem seguidas para ir de p
 ```
 
 Aqui nos interessa o método `G.path`, que faz uma busca no grafo para retornar o caminho ótimo de
-um ponto a outro. Você pode usar esta informação para planejar a sua rota de entrega.
+um ponto a outro. Vocês podem usar esta informação para planejar a sua rota de entrega.  Cada nó é,
+internamente, indexado por uma tupla $`(x,y)`$ representando a posição do nó no mundo.
 
-A terceira informação disponível a vocês é se a informação foi bem-sucedida. Para isso, vocês
-usarão o método `Mailbox.deliver`, como o exemplo abaixo mostra.
+A terceira informação disponível a vocês é se a entrega do pacote foi bem-sucedida. Para isso,
+vocês usarão o método `Mailbox.deliver`, como o exemplo abaixo mostra.
 
 ```python
 # Assumindo self como uma instância de Agent e self.env como o ambiente de simulação
@@ -145,17 +146,41 @@ a cada tipo de penalidade dependendo da dificuldade de resolução de cada uma d
 entrega todos os pacotes e termina no ponto inicial sem nenhuma infração a princípio deve receber
 10 na nota final (a menos que informações não permitidas tenham sido utilizadas).
 
+### Executando seu agente
+
+A execução do seu Patobô depende de qual cidade ele estará localizado e de uma lista de encomendas
+a serem entregues. Estas informações deverão ser passadas ao robô por meio de um arquivo de
+listagem `.mail` contendo o mapa a ser carregado e uma lista de posições $`(i,j)`$. Cada $`(i,j)`$
+é uma tupla representando a posição da entrega na grade do mapa. Obrigatoriamente $`(i,j)`$ deve
+estar num trecho reto de rua. Vocês pode testar o seu Patobô nas situações dadas pelos arquivos em
+[examples/](./examples/).
+
+Opcionalmente, vocês também podem criar sua própria listagem. O arquivo
+[make_order.py](./make_order.py) auxilia na criação de uma listagem aleatória. Para executar o
+script, basta passar o caminho para o mapa `.yaml` e o número de pacotes a serem entregues.
+
+```python
+  # Gera uma listagem mylist.mail no mapa mailduck1_dense.yaml com 14 pacotes a serem entregues
+  python3 assignments/mailduck/make_order.py maps/mailduck1_dense.yaml 14 > mylist.mail
+```
+
+Para executar esta listagem, basta executar `mailduck.py` passando a listagem como argumento.
+
+```python
+python3 assignments/mailduck/mailduck.py mylist.mail
+```
 
 ### Entrega
 
-Você deve entregar os seguintes itens para o projeto final:
+Vocês devem entregar os seguintes itens para o projeto final:
 
 1. Seu código `agent.py`;
-2. Quaisquer materiais, códigos, redes neurais, etc. que são necessários para executar o código;
+2. Quaisquer materiais, dados, redes neurais, etc. que são necessários para executar o código;
 3. Um vídeo do seu agente executando pelo menos um dos casos em [examples](./examples).
 
-Para o item (3), você pode utilizar a gravação automática por meio da variável de construção
+Para o item (3), vocês podem utilizar a gravação automática por meio da variável de construção
 `video_path` na criação do ambiente em [mailduck.py](./mailduck.py).
 
 <br>
+
 **Boa sorte e bom trabalho! Patolândia conta com vocês!**
