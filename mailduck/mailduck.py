@@ -50,7 +50,7 @@ def main():
             with open("/tmp/output.txt", 'w') as file:
                 for k in env.eval._log:
                     for l in env.eval._log[k]: file.write(str(l[0]) + " " + str(l[1]) + '\n')
-                file.write(str(env.mileage.mileage()), "= energy usage")
+                file.write(str(env.mileage.mileage()) + " = energy usage")
             env.close()
             sys.exit(0)
 
