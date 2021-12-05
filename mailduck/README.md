@@ -25,8 +25,9 @@ entregar todas as encomendas o mais rápido possível e voltar à sua posição 
 vocês terão acesso a dois tipos de informação:
 
 1. Sua posição inicial;
-2. Um mapa topológico da cidade; e
-3. Se a entrega de uma encomenda foi bem-sucedida.
+2. Seu ângulo atual;
+3. Um mapa topológico da cidade; e
+4. Se a entrega de uma encomenda foi bem-sucedida.
 
 Por causa do acidente espacial do ano passado, não teremos nenhum acesso a GPS. Vocês terão de usar
 todas as suas habilidades de robótica e inteligência artificial para fazer a entrega apenas com as
@@ -64,8 +65,9 @@ execução, que iremos discutir mais abaixo.
 ### O que é observável?
 
 Para guiar o robô em suas entregas e conseguirmos completar a missão do Patobô, vocês terão acesso
-a três informações observáveis. A primeira é a posição inicial. Ela estará salva como uma variável
-de instância de `Agent` com nome `initial_pos`, inicialmente inicializada no construtor da classe.
+a quatro informações observáveis. A primeira é a posição inicial. Ela estará salva como uma
+variável de instância de `Agent` com nome `initial_pos`, inicialmente inicializada no construtor da
+classe.
 
 ```python
 self.initial_pos = env.get_position() # em Agent.__init__:agent.py
@@ -74,7 +76,12 @@ self.initial_pos = env.get_position() # em Agent.__init__:agent.py
 Lembre-se que apesar de usarmos `env.get_position()` neste trecho, seu uso no resto do código é
 proibido.
 
-A segunda é o mapa topológico da cidade. Diferentemente da tarefa de planejamento de rotas, o mapa
+A segunda informação é seu ângulo atual a partir de uma bússola, que para simplificar o problema,
+é considerada perfeita. É possível fazer uma medição da bússola por meio da variável
+`env.cur_angle`, onde `env` é o simulador e pode ser acessado internamente pelo `Agent` por meio de
+`self.env.cur_angle`.
+
+A terceira é o mapa topológico da cidade. Diferentemente da tarefa de planejamento de rotas, o mapa
 topológico que usaremos é um grafo não-direcionado sem ponderações nas arestas. Cada nó é um
 segmento reto de rua, curva ou intersecção. Uma aresta entre dois nós indica se as duas partes de
 rua são conectadas. Além disso, cada nó do grafo possue uma bijeção com a sua posição no mapa de
@@ -115,8 +122,8 @@ mundo.
 existe uma incerteza (alta) de qual é nossa pose real. Faz parte do projeto implementar algum tipo
 de localização.
 
-A terceira informação disponível a vocês é se a entrega do pacote foi bem-sucedida. Para isso,
-vocês usarão o método `Mailbox.deliver`, como o exemplo abaixo mostra.
+A quarta e última informação disponível a vocês é se a entrega do pacote foi bem-sucedida. Para
+isso, vocês usarão o método `Mailbox.deliver`, como o exemplo abaixo mostra.
 
 ```python
 # Assumindo self como uma instância de Agent e self.env como o ambiente de simulação
