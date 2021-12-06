@@ -110,6 +110,12 @@ v = G.closest_node((0.5, 1.5)) # retorna o nó mais próximo da posição (0.5, 
 
 p, q = (0.5, 1.5), (3, 2.5)
 W = G.path(p, q) # retorna uma lista de posições a serem seguidas para ir do nó mais próximo de p até o nó mais próximo de q
+
+G.remove_dir_edge(p, q) # deleta a aresta p->q
+
+G.remove_edge(N[1], N[2]) # deleta as arestas N[1]->N[2] e N[2]->N[1]
+
+G.remove_node(p) # deleta o nó p junto com todas as arestas conectando-a
 ```
 
 Aqui nos interessa o método `G.path`, que faz uma busca no grafo para retornar o caminho ótimo de
@@ -148,6 +154,11 @@ adicionada no relatório do Patobô. De forma parecida, quando um pacote é entr
 errado, ou seja, fora do raio de $`0.2`$ unidades do destinatário, uma infração também é adicionada
 no relatório. Infrações contam como descontos na nota final do projeto.
 
+As posições de entrega dos pacotes são ilustradas visualmente no simulador como um círculo. Se a
+entrega ainda não foi realizada o círculo terá cor azul, e verde se foi entregue com sucesso.
+Simplificamos a complexa tarefa do robô conferir a numeração das casas e entregar o pacote na casa
+certa.
+
 ### Navegando a pato-cidade
 
 Além de planejar as rotas mais eficientes, o seu Patobô deve também executar a rota por meio de um
@@ -157,6 +168,14 @@ estabelecido. Além disso, seu seguidor de pista deve obedecer as regras de trâ
 pato-robótica. Ou seja, colisões com pato-pedestres, outros Patobôs, prédios, casas, cones de
 trânsito ou qualquer outro objeto acarretará numa infração adicionada ao relatório do Patobô.
 Infrações também serão dadas caso o Patobô saia dos limites da pista.
+
+Patos são notoriamente péssimos motoristas, o que torna Patolândia a capital dos acidentes
+automobilísticos. É possível que algum acidente ocorra na cidade, o que faz com que um trajeto
+acabe completamente obstruído. Neste caso, o seu Patobô deve identificar que o acidente
+impossibilita uma ultrapassagem segura e procurar uma rota alternativa. Neste, e apenas neste caso,
+o Patobô pode executar uma virada em U (ou seja, um retorno de 180 graus) para evitar maiores
+acidentes. Para planejar vias alternativas, vocês podem atualizar o mapa topológico removendo
+arestas e nós.
 
 ### Verificando seu relatório de infrações
 
@@ -207,14 +226,19 @@ Também deve mostrar exemplos de execução. Para este último, vocês podem uti
 automática do simulador por meio da variável de construção `video_path` na criação do ambiente em
 [mailduck.py](./mailduck.py).
 
+**Nota:** Não se esqueça de comentar eventuais mudanças de rotas devido a acidentes! Explique como
+foi feita a identificação do acidente, a atualização no planejamento e a execução da virada em U.
+
 Os vídeos de todos os grupos serão apresentados durante a aula no dia **17/01/2022**.
 
 ### Bônus
 
-Além das infrações, o relatório do Patobô também contém uma medição de energia usada pelo robô
-proporcional à distância percorrida durante todas as entregas. Como signatária da COP26, Patolândia
-está comprometida para a redução de gastos de energia, e isso inclue o Patobô. O time de Patobô que
-for mais eficiente nos casos de teste ganhará +1.0 de bônus na nota do projeto!
+Além das infrações, o relatório do Patobô também contém uma medição de energia usada pelo robô.
+Vamos considerar que o uso de energia do robô tem taxa constante e invariante a sua velocidade, o
+que na prática significa que o Patobô que entrega pacotes mais rápido é mais eficiente. Como
+signatária da COP26, Patolândia está comprometida para a redução de gastos de energia, e isso
+inclue o Patobô. O time de Patobô que for mais eficiente nos casos de teste ganhará +1.0 de bônus
+na nota do projeto!
 
 ### Comunicação entre grupos
 

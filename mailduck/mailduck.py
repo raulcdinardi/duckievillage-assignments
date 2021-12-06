@@ -66,6 +66,7 @@ def main():
             env.eval.track()
             track_dt = 0
         env.render()
+        env.mileage.update(dt)
 
     pyglet.clock.schedule_interval(loop, 1.0 / env.unwrapped.frame_rate)
     pyglet.app.run()
