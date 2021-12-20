@@ -1,5 +1,6 @@
 import sys
 import pyglet
+import time
 from pyglet.window import key
 from duckievillage import create_env, FRONT_VIEW_MODE, TOP_DOWN_VIEW_MODE, FULL_VIEW_MODE
 
@@ -68,9 +69,11 @@ def main():
         env.render()
         env.mileage.update(dt)
 
-    pyglet.clock.schedule_interval(loop, 1.0 / env.unwrapped.frame_rate)
-    pyglet.app.run()
-    env.close()
+    dt = env.delta_time
+    while True:
+        loop(dt)
+        time.sleep(dt)
+        print(dt)
 
 if __name__ == '__main__':
     main()
