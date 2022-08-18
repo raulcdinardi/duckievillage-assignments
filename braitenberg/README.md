@@ -14,7 +14,7 @@ Sua tarefa é modificar o código para implementar o comportamento "enamorado" (
 > O veículo de comportamento enamorado se aproxima da fonte, mantendo-se a uma curta
 > distância dela e evitando colisão com ela.
 
-O robô simulado que iremos usar neste curso possui como *sensor* uma única câmera frontal e como *atuadores* dois
+O robô usamos neste curso possui como *sensor* uma única câmera frontal e como *atuadores* dois
 motores para cada uma das duas rodas traseiras.
 
 <figure>
@@ -49,7 +49,7 @@ Inspecione o arquivo [braitenberg.py](./braitenberg.py) e note como as matrizes 
 
 ## Ativação
 
-Tanto o comportamento agressivo como o comportamento enamorado podem ser implementados usando uma relação de ativição linear entre os sensores e os motores:
+Tanto o comportamento agressivo como o comportamento enamorado podem ser implementados usando uma relação de ativação linear entre os sensores e os motores:
 
 ```math
 p_e = c + g \cdot\frac{1}{z}\left(\sum_{i=1}^n\sum_{j=1}^m E_{ij}\cdot M_{ij} \right),
