@@ -1,4 +1,4 @@
-# Atividade 1 - Direção manual
+# Atividade - Direção manual
 
 Nesta atividade, apresentaremos o básico do ambiente de simulação de robôs autônomos que usaremos durante a disciplina. 
 Vamos usar uma versão modificada do simulador [Duckietown](https://github.com/duckietown/gym-duckietown/), que
@@ -8,16 +8,16 @@ Para familiarizar-se com a estrutura de um agente do simulador, você deverá co
 
 ## Pré-requisito
 
-Vamos assumir que você instalou o simulador e clonou o projeto de atividades executando o arquivo [install.sh](../../install.sh) do projeto [Duckievillage](https://gitlab.uspdigital.usp.br/mac0318-2021/duckievillage). Antes de cada atividade, lembre-se de ativar o ambiente do Anaconda:
+Vamos assumir que você instalou o simulador e clonou o projeto de atividades executando o arquivo [install.sh](../../install.sh) do projeto [Duckievillage](https://gitlab.uspdigital.usp.br/mac0318-2021/duckievillage). Antes de realizar cada atividade com o simulador, lembre-se de ativar o ambiente do Anaconda:
 
 ```bash
 conda activate duckietown
 ```
 
-## Controle manual
+## Controle manual no simulador
 
 O arquivo [manual.py](./manual.py) contém um código mínimo criando um ambiente de simulação e um agente móvel. 
-Antes de continuar, preencha o cabeçalho do arquivo com seu nome e número USP (para que possamos identificar corretamente sua submissão no e-disciplinas).
+Antes de continuar, preencha o cabeçalho do arquivo com seu nome e número USP (para que possamos identificar corretamente sua submissão no e-disciplinas). Se estiver fazendo em grupo, preencha o cabeçalho com o nome de todos os integrantes.
 
 O arquivo importa as seguintes bibliotecas.
 
@@ -50,3 +50,10 @@ Modifique o arquivo para implementar um controle remoto manual usando o teclado 
 Procure valores que permitam ao robô mover-se com velocidade adequada, isto é,  rápido mas de maneira estável.
 Quando estiver satisfeito com o resultado, submeta o arquivo `manual.py` no e-discipinas.
 
+Depois siga as instruções em sala para dirigir o robô real usando o comando
+
+```
+dts duckiebot keyboard_control NOME_ROBO
+```
+
+onde `NOME_ROBO` é o nome do robô que você vai controlar (p.ex., `pato2`).

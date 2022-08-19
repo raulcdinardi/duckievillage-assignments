@@ -1,6 +1,6 @@
-# Atividade 2 - Veículos de Braitenberg
+# Atividade - Veículos de Braitenberg
 
-Nessa atividade você deve implementar um veículo de Braitenberg no simulador Duckievillage assumindo que as fontes atratoras são patos, como na figura abaixo.
+Nessa atividade você vai implementar um veículo de Braitenberg  assumindo que as fontes atratoras são patos, como na figura abaixo.
 
 <figure>
   <div style="text-align: center">
@@ -8,13 +8,16 @@ Nessa atividade você deve implementar um veículo de Braitenberg no simulador D
   </div>
 </figure>
 
-O arquivo [braitenberg.py](./braitenberg.py) contém um código inicial implementando o comportamento agressivo. 
-Sua tarefa é modificar o código para implementar o comportamento "enamorado" (_lover_):
+Sua tarefa será implementar um robô que segue o comportamento "enamorado" (_lover_):
 
-> O veículo de comportamento enamorado se aproxima da fonte, mantendo-se a uma curta
+> O veículo se aproxima da fonte, mantendo-se a uma curta
 > distância dela e evitando colisão com ela.
 
-O robô usamos neste curso possui como *sensor* uma única câmera frontal e como *atuadores* dois
+Vamos primeiro implementar o agente no simulador Duckievillage e depois re-implementá-lo no duckiebot.
+
+## Sensor no Duckiebot
+
+O robô que usamos neste curso possui como *sensor* uma única câmera frontal e como *atuadores* dois
 motores para cada uma das duas rodas traseiras.
 
 <figure>
@@ -64,10 +67,16 @@ Note que as matrizes de ativação são equivalentes aos sensores de luz no prob
 veículos de Braitenberg. De forma parecida, podemos também mudar as conexões dos sensores para
 implementar diferentes comportamentos.
 
-## Implementando a tarefa
+## Tarefa
 
-Sua tarefa nesta atividade é modificar o arquivo [braitenberg.py](./braitenberg.py) para implementar o comportamento enamorado alterando as
-matrizes de conexões, e valores das constantes e do filtro de cor. As matrizes de conexão são definidas no construtor da classe `Agent`, o filtro é implementado no método `process` e as constantes de controle são definidas no método `send_commands`.
-Submeta sua solução (o arquivo [braitenberg.py](./braitenberg.py)) via e-disciplinas.
+O arquivo [braitenberg.py](./braitenberg.py) contém um código inicial implementando o comportamento agressivo para o agente simulado. 
+Sua primeira tarefa nesta atividade é modificar o arquivo [braitenberg.py](./braitenberg.py) para implementar o comportamento enamorado alterando as matrizes de conexões, e valores das constantes e do filtro de cor. As matrizes de conexão são definidas no construtor da classe `Agent`, o filtro é implementado no método `process` e as constantes de controle são definidas no método `send_commands`.
+Submeta sua solução (o arquivo [braitenberg.py](./braitenberg.py)) via e-disciplinas. Lembre-se que para acessar o simulador você deve antes ativar o ambiente:
+
+```bash
+conda activate duckietown
+```
+
+Com isso pronto, você deve seguir para implementar no robô duckiebot. Para isso, siga as instruções em sala. 
 
 

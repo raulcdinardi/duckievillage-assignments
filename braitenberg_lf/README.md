@@ -1,4 +1,4 @@
-# Atividade 3 - Veículo de Braitenberg com comportamento seguidor de pista 
+# Atividade - Veículo de Braitenberg com comportamento seguidor de pista 
 
 Nesta atividade você deve implementar um caso de uso mais realista para os veículos de
 Braitenberg. Sua tarefa aqui será construir um robô que se segue a faixa correta na pista no mundo simulado do duckietown (que possui um grau de padronização e homogeneidade longe das condições de trânsito de uma cidade real).

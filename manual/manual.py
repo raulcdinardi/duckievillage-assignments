@@ -1,26 +1,29 @@
-# MAC0318 Intro to Robotics
-# Please fill-in the fields below with your info
+# MAC0318 Programação de Robôs Móveis
 #
-# Name:
+# Preencha o cabeçalho abaixo com seus dados. 
+# Se o trabalho for feito em grupo, coloque os nomes de 
+# todos os integrantes (copie e cole as linhas abaixo)
+#
+# Nome:
 # NUSP:
 #
 # ---
 #
-# Assignment 1 - Manual steering
+# Atividade - Direção manual
 #
-# Task:
-#  - Write a remote control Duckiebot
+# Objetivo:
+#  - Escrever um agente controlado pelo teclado no simulador.
 #
-# Don't forget to run this from the Duckievillage root directory (example):
+# Não se esqueça de executar este arquivo do diretório raiz do Duckievillage (p.ex.):
 #   cd ~/MAC0318/duckievillage
 #   conda activate duckietown
 #   python3 assignments/manual/manual.py
 #
-# Submission instructions:
-#  0. Add your name and USP number to the file header above.
-#  1. Make sure that any last change haven't broken your code. If the code chrases without running you'll get a 0.
-#  2. Submit this file via e-disciplinas.
-#  3. Push changes to your git fork.import sys
+# Instruções:
+#  0. Preencha o cabeçalho acima
+#  1. Assegure-se que o código submetido é o correto e funcionando. Se seu código não roda, você receberá nota 0 na atividade.
+#  2. Submeta este arquivo no e-disciplinas.
+#  3. Coloque esse arquivo no seu repositório pessoal (sugestão: fazendo um `fork` do repositório no gitlab). Você usará sua solução como base em outras atividades futuras.
 
 import sys
 import pyglet

@@ -1,29 +1,29 @@
-# MAC0318 Intro to Robotics
-# Please fill-in the fields below with your info
+# MAC0318 Programação de Robôs Móveis
 #
-# Name:
+# Preencha o cabeçalho abaixo com seus dados. 
+# Se o trabalho for feito em grupo, coloque os nomes de 
+# todos os integrantes (copie e cole as linhas abaixo)
+#
+# Nome:
 # NUSP:
 #
 # ---
 #
-# Assignment 3 - Braitenberg vehicle for lane following
+# Atividade - Veículo de Braitenberg para seguidor de faixa
 #
-# Task:
-#  - Implement a Braitenberg's vehicle that performs the task of lane following in the duckietown environment.
-# Your agent should be able to follow a lane by reacting to the traffic markings on the road. Construct a
-# color segmentation filter to identify road markings and adapt the "lover" behavior so that the robot
-# moves forward while maintaining a short distance from either lane marking.
+# Objetivo:
+#  - Usar a arquitetura de um veículo de Braitenberg para implementar um veículo seguidor de faixa.
 #
-# Don't forget to run this file from the Duckievillage root directory path (example):
+# Não se esqueça de executar este arquivo do diretório raiz do Duckievillage (p.ex.):
 #   cd ~/MAC0318/duckievillage
 #   conda activate duckietown
 #   python3 assignments/braitenberg/lane_following.py
 #
-# Submission instructions:
-#  0. Add your name and USP number to the file header above.
-#  1. Make sure that any last change haven't broken your code. If the code crashes without running you'll get a 0.
-#  2. Submit this file via e-disciplinas.
-#  3. Push changes to your git fork.
+# Instruções:
+#  0. Preencha o cabeçalho acima
+#  1. Assegure-se que o código submetido é o correto e funcionando. Se seu código não roda, você receberá nota 0 na atividade.
+#  2. Submeta este arquivo no e-disciplinas.
+#  3. Coloque esse arquivo no seu repositório pessoal (sugestão: fazendo um `fork` do repositório no gitlab). Você usará sua solução como base em outras atividades futuras.
 
 import sys
 import pyglet
