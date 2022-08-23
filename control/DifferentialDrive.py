@@ -1,3 +1,16 @@
+'''
+Implements the cinematics of a Differential Drive Robot on a plane.
+The robot is configured by the wheel radius R, the distance between wheels LL, and
+constraints max_speed and max_acc on the speed and acceleration, resp.
+
+The first version takes the linear and angular velocities for the robot's center 
+of mass as control signals, while the second takes the angular velocities for the
+left and right wheels as control signals.
+
+The system is time discretized, with time steps of 0.1 [s].
+'''
+
+
 class DifferentialRobot:
     ''' Simulates kinematics behaviour of a 2D differential drive robot driven by linear and angular velocities. '''
     def __init__(self, x0=None, R=0.0381, LL=0.1, max_speed=5, max_acc=10):
