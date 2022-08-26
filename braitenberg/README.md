@@ -34,7 +34,7 @@ Para esta atividade, vamos usar processar as imagens capturadas para produzir um
 
 ## Sensor de cor
 
-Para detectarmos os patos, vamos implementar um filtro de pontos da imagem pela cor (tal processamento é conhecida como _segmentação de imagem por cores_). O arquivo [filtro.ipynb](./filtro.ipynb) contém um _notebook_ do jupyter descrevendo como construir um filtro de segmentação por cores.
+Para detectarmos os patos, vamos implementar um filtro de pontos da imagem pela cor (tal processamento é conhecida como _segmentação de imagem por cores_). O arquivo [ArquiteturasSesorimotoras01.ipynb](./ArquiteturasSesorimotoras01.ipynb) contém um _notebook_ do jupyter descrevendo como construir um filtro de segmentação por cores.
 O resultado do filtro é uma matriz $`M\in\{0,1\}^{m\times n}`$ de máscara tal que
 ```math
 M_{ij}=\begin{cases}
