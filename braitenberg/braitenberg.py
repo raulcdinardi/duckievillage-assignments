@@ -43,6 +43,8 @@ class Agent:
         # Acquire image for initializing activation matrices
         img = self.env.front()
         img_shape = img.shape[0], img.shape[1]
+        # Normalization constant of sensor aggregation
+        limit = img.shape[0]*img.shape[1]/4
         self.left_motor_matrix = np.zeros(shape=img_shape, dtype="float32")
         self.right_motor_matrix = np.zeros(shape=img_shape, dtype="float32")
         # TODO! Replace with your code
@@ -64,13 +66,13 @@ class Agent:
         img = self.env.front()
         # run image processing routines
         P = self.preprocess(img)
-        # build left and right signals
+        # build left and right signals        
         L = float(np.sum(P * self.left_motor_matrix))
-        R = float(np.sum(P * self.right_motor_matrix))
-        limit = img.shape[0]*img.shape[1]
+        R = float(np.sum(P * self.right_motor_matrix))        
         # These are big numbers, thus rescale them to unit interval
-        L = rescale(L, 0, limit)
-        R = rescale(R, 0, limit)
+        self.limit = max(R,max(self.limit,L))
+        L = rescale(L, 0, self.limit)
+        R = rescale(R, 0, self.limit)
         # Tweak with the constants below to get to change velocity or stabilize movements
         # Recall that pwm sets wheel torque, and is capped to be in [-1,1]
         gain = 5.0
