@@ -97,6 +97,6 @@ class DifferentialRobot2(DifferentialRobot):
     def diff(self, x, phi_l, phi_r):
         ''' Forward kinematics motion. '''
         v = self.wheel_radius*(phi_l+phi_r)/2
-        w = self.wheel_radius*(phi_r-phi_l)*self.wheel_base
+        w = self.wheel_radius*(phi_r-phi_l)/self.wheel_base
         return super(DifferentialRobot2, self).diff(x, v, w)
       
