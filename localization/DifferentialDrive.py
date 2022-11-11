@@ -1,5 +1,5 @@
 '''
-Implements the kinematics of a Differential Drive Robot on a plane.
+Implements the kinematics of a Differential Drive Robot with on a plane imprecise actuators.
 The robot is configured by the wheel radius R, the distance between wheels LL, and
 constraints max_speed and max_acc on the speed and acceleration, resp.
 
@@ -9,18 +9,21 @@ left and right wheels as control signals.
 
 The system is time discretized, with time steps of 0.1 [s].
 '''
+import numpy as np
 
 
 class DifferentialRobot:
     ''' Simulates kinematics behaviour of a 2D differential drive robot driven by linear and angular velocities. '''
-    def __init__(self, x0=None, R=0.0381, LL=0.1, max_speed=5, max_acc=10):
+    def __init__(self, x0=None, R=0.0381, LL=0.1, max_speed=5, max_acc=10, v_err=0.7, w_err=1.0, y_err=0.2):
         ''' Initialize differential drive robot. '''
-        import numpy as np
         self.wheel_radius = R # wheel radius size [m]
         self.wheel_base = LL # wheel base distance [m]
         self.max_speed = max_speed # max. speed [m/s]        
         self.max_acceleration = max_acc # max. acceleration
         self.dt = 0.1 # sampling rate [s]
+        self.v_err = v_err # gaussian noise magnitude of linear vel
+        self.w_err = w_err # gaussian noise magnitude of angular vel
+        self.y_err = y_err # gaussian noise magnitude of sensor 
         if x0 is None:
             self.x = np.zeros(3)
         else:
@@ -33,7 +36,6 @@ class DifferentialRobot:
         
     def diff(self, x, v, w):
         ''' Ordinary differential equation for forward kinematics motion. '''
-        import numpy as np
         acc = (v - self.v_prev)/self.dt
         if acc > self.max_acceleration:
             v = self.v_prev + self.max_acceleration*self.dt
@@ -51,6 +53,10 @@ class DifferentialRobot:
         for one timestep with control signal u = (v, w) for velocity v and steering w.
         Corresponds to Euler forward integration of the differential equation.
         '''
+        # We will assume a simple action-noise model, where the linear and 
+        # angular velocities are independently corrupted by gaussian noise
+        v = v + self.v_err*np.random.normal()
+        w = w + self.w_err*np.random.normal()
         # update state
         dx = self.dt * self.diff(self.x, v, w)
         self.x += dx
@@ -59,11 +65,16 @@ class DifferentialRobot:
         self.v_hist.append(v)
         self.w_hist.append(w)
         return self.x
+
+    def perceive(self):
+        ' Returns a measurement of the current state. '
+        # We will use a simple linear-Gaussian measuremente model
+        y = self.x + self.y_err*np.random.normal()
+        return y
         
     def plot(self, figsize=(7,7)):
         ''' Plot trajectory history. '''
         import matplotlib.pyplot as plt
-        import numpy as np
         
         fig, axes = plt.subplots(2,2, figsize=figsize)
 
