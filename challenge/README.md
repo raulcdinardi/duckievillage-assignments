@@ -89,7 +89,7 @@ informações não permitidas tenham sido utilizadas).
 
 ### Entrega
 
-A data maxima de entrega é **19/12/2022*, vocês devem entregar:
+A data maxima de entrega é **19/12/2022**, vocês devem entregar:
 
 1. Seu código `agent.py`;
 2. Quaisquer materiais, dados, redes neurais, etc. que são necessários para executar
