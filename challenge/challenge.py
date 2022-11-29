@@ -37,7 +37,7 @@ def main():
     )
 
     # For a top-down view of the map, change this to TOP_DOWN_VIEW_MODE. For both, FULL_VIEW_MODE.
-    env.set_view(FRONT_VIEW_MODE)
+    env.set_view(FULL_VIEW_MODE)
     env.render()
 
     @env.unwrapped.window.event
