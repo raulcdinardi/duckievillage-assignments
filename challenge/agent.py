@@ -25,7 +25,7 @@
 # Don't forget to run this file from the Duckievillage root directory path (example):
 #   cd ~/MAC0318/duckievillage
 #   conda activate duckietown
-#   python3 assignments/mailduck/mailduck.py assignments/mailduck/examples/1.mail
+#   python3 assignments/challenge/challenge.py assignments/challenge/examples/challenge_n
 #
 # Submission instructions:
 #  0. Add your names and USP numbers to the file header above.
