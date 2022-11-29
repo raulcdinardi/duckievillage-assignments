@@ -68,7 +68,6 @@ def main():
     while True:
         loop(dt)
         time.sleep(dt)
-        print(dt)
 
 if __name__ == '__main__':
     main()
