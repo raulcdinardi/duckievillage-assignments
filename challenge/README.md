@@ -1,48 +1,40 @@
 # MAC0318 Introdução à Programação de Robôs Móveis
 
-## Projeto Final - Desafio Pato Wheels
+## Projeto final - O Desafio Pato Wheels
 
-Depois da crise de entregas de 2021 na Patolândia, ocasionada pelo aumento das compras
-virtuais em epocas de pandemia, os patinhos finalmente estao prontos para recomecar
-seu mais antigo costume: o **desafio *Pato Wheels***.
+Está na hora do **desafio *Pato Wheels***!
 
-Por conta do distanciamento social, essa milenar cerimonia havia sido suspensa na
-cidade dos patos nos ultimos anos. Agora, patos dos mais diferentes paises estao
-viajando para a Patolândia em busca de assistir e participar desse historico
-campeonato, que somente ocorre de 4 em 4 anos. Mas temos um problema, diversas
-pistas de corrida nao conseguiram ser finalizadas a tempo e o numero de participantes
-desse ano superou todos os recordes. Por isso, o prefeito e engenheiros da cidade
-improvisaram pistas usando as proprias ruas e avenidas da cidade.
+Por conta da pandemia e do distanciamento social, essa milenar cerimônia esteve suspensa na
+cidade dos patos nos últimos anos. Agora, patos dos mais diferentes cantos e lagos estão
+viajando para Patolândia para competir nesse que promete ser o mais histórico
+desafio de sempre! Mas temos um problema, o pato-prefeito anterior não terminou as pistas de corrida como prometido e o número de participantes inscritos superou as expectativas. Por isso, o atual pato-prefeito, Paulo Pato, auxiliado pelos seus pato-engenheiros, decidiram utilizar as próprias ruas da cidade como pistas -- com os patos-cidadãos realizando suas atividades rotineiras! 
+A competição será disputada em vários circuitos distintos -- em cada circuito vence aquele que terminar uma volta na pista em menor tempo, descontadas as penalizações por infrações. 
 
-Aqui entra o seu papel, como umx novx competidxr pela Taca dos Patos, seu objetivo
-nao deve ser somente pilotar mais rapido que os outros e respeitando as restricoes
-de cada pista, voce tambem deve se atentar aos diversos patos espectados que estarao
-assistindo o evento, desviando deles ou de outros corredores caso necessario.
+Para evitar complicações legais com possíveis incidentes o pato-prefeito e sua equipe técnica decidiram que os patobôs deveriam ser dirigidos de maneira automática por uma inteligência artificial. 
+Assim, ninguém pode ser responsabilizado! Um pato-gênio -- so que não!
+
 
 ### Sua missão
 
-A missão é simples: **ganhar o campeonato sem ferir outros patinhos**.
-
-Usando o Patobô, que possue apenas dois motores para cada roda e uma câmera frontal,
-vocês devem percorrer as diferentes pistas da competicao, completando uma volta em
-cada uma delas. Para isso, vocês terão acesso aos seguintes tipos de informação:
+Seu objetivo é programar um dos patobôs para terminar o percurso o mais rápido possível respeitando as regras de trânsito e evitando a qualquer custo colocar a vida dos patos-cidadãos em risco.
+Os patobôs possuem a configuração usual: duas rodas impulsionadas independentemente e os seguintes sensores:
 
 1. Sua posição e ângulo atual;
-2. Imagens instantaneas obtidas por meio da sua câmera frontal; e
+2. Imagens instantâneas obtidas por meio da sua câmera frontal; e
 3. Se o seu carrinho fugiu para fora da pista ou colidiu contra um objeto.
 
-Para não causar mais caos nas cidades, o Presidente Paulo Pato ressaltou enfaticamente
-que vocês devem seguir as três regras da pato-robótica:
+O Prefeito Paulo Pato comunicou que as três regras da pato-robótica devem ser seguidas:
 
-1. O Patobô não deve machucar nenhum pato;
-2. O Patobô não deve causar danos materiais à cidade;
-3. O Patobô deve permanecer dentro dos limites da rua; e
-4. Sua velocidade deve ser igual ou superior a 0.2m/s (podendo ser reduzida somente
-em desvios ou realização de curvas).
+1. O patobô não deve machucar nenhum pato;
+2. O patobô não deve causar danos materiais à cidade ou a outros patobôs;
+3. O patobô deve permanecer dentro dos limites da rua; e
+4. O patobô deve andar a uma velocidade média igual ou superior a 0.2m/s.
 
 Para cumprir sua missão, vocês podem usar quaisquer técnicas, vistas em aula ou 
-não, desde que vocês obedeçam as três regras acima e apenas utilizem as informações
+não, desde que vocês obedeçam as quatros regras acima e apenas utilizem as informações
 dadas. O uso de informações adicionais é proibido.
+
+### Construindo o patobô
 
 O seu código deve ser implementado a partir do arquivo [agent.py](./agent.py), que
 contém o código para o agente do Patobô. Como existem imperfeicoes nas ruas da
@@ -63,21 +55,6 @@ python3 assignments/challenge/challenge.py assignments/challenge/examples/challe
 Onde o `n` acima é quaisquer um dos possíveis arquivos `challenge_*` no diretório de
 exemplos para execução.
 
-### Navegando a pato-cidade
-
-Seu Patobô deve também executar a rota por meio de um seguidor de pistas, como vocês
-irão navegar a cidade está a cargo de vocês. Todas as técnicas vistas em aula (ou não)
-são permitidas desde que não precisem de mais informação que o estabelecido. Além disso,
-seu seguidor de pista deve obedecer as regras de trânsito e as regras da pato-robótica.
-Ou seja, colisões com pato-pedestres, outros Patobôs, prédios, casas, cones de trânsito
-ou qualquer outro objeto acarretará numa infração adicionada ao relatório do Patobô.
-Infrações também serão dadas caso o Patobô saia dos limites da pista.
-
-Patos são notoriamente péssimos motoristas, o que torna Patolândia a capital dos
-acidentes automobilísticos. É possível que algum acidente ocorra na cidade, o que faz
-com que um trajeto acabe completamente obstruído. Neste caso, o seu Patobô deve
-identificar que o acidente impossibilita uma ultrapassagem segura e ficar parado. 
-
 ### Verificando seu relatório de infrações
 
 O relatório de infrações é salvo em `/tmp/output.txt` quando o simulador é encerrado 
@@ -94,14 +71,9 @@ A data maxima de entrega é **19/12/2022**, vocês devem entregar:
 1. Seu código `agent.py`;
 2. Quaisquer materiais, dados, redes neurais, etc. que são necessários para executar
 o código;
+3. Um vídeo exibindo o comportamento do agente em algumas pistas.
 
-Em **20/12/2022** e **21/21/2022**, executaremos os diferentes codigos nas aulas
-de terca e quarta. Exemplificando a performance dos diferentes competidores em
-variados percursos.
-
-**Nota:** Não se esqueça de comentar eventuais mudanças de rotas devido a acidentes!
-Explique como foi feita a identificação do acidente, a atualização no planejamento 
-para desviar desse objeto.
+Em **20/12/2022** e **21/21/2022**, executaremos os diferentes códigos enviados no final da aula, para ilustrar as diferentes abordagens e comportamentos obtidos. 
 
 ### Bônus
 
