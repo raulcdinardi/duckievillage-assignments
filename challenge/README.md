@@ -66,14 +66,16 @@ informações não permitidas tenham sido utilizadas).
 
 ### Entrega
 
-A data maxima de entrega é **21/12/2022**, vocês devem entregar:
+A data maxima de entrega é ~~21/12/2022~~ **5/1/2023**, vocês devem entregar:
 
 1. Seu código `agent.py`;
 2. Quaisquer materiais, dados, redes neurais, etc. que são necessários para executar
 o código;
-3. Um vídeo exibindo o comportamento do agente em algumas pistas.
+3. Um vídeo exibindo o comportamento do agente em algumas pistas e explicando a arquitetura do se agente.
 
-Em **20/12/2022** e **21/21/2022**, executaremos os diferentes códigos enviados ao final da aula, para ilustrar as diferentes abordagens e comportamentos obtidos. 
+Recomendamos colocar o vídeo no youtube ou google drive, o código e material auxiliar no repositório no gitlab e/ou no goole dive (no caso de arquivos muito grandes) e submeter um arquivo de texto ou markdown listando os endereços dos arquivos na nuvem com as devidas descrições. Certifique-se de que os arquivos são acessíveis (ou seja, que não existem problemas de permissão).
+
+~~Em 20/12/2022 e 21/21/2022, executaremos os diferentes códigos enviados ao final da aula, para ilustrar as diferentes abordagens e comportamentos obtidos~~. 
 
 ### Bônus
 
@@ -84,7 +86,7 @@ mais rapido em cada desafio um bônus na nota do projeto!
 ### Comunicação entre grupos
 
 Os grupos não devem compartilhar informações de suas soluções. Porém, é permitido
-compartilhar os vídeos de execução dos seus agentes entre grupos. Para gravar videos,
+compartilhar os vídeos de execução dos seus agentes entre grupos. Para gravar vídeos,
 vocês podem utilizar a gravação automática do simulador por meio da variável de
 construção `video_path` na criação do ambiente em [challenge.py](./challenge.py).
 
