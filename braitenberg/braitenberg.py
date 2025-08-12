@@ -15,15 +15,15 @@
 #  - Implementar um agente reativo com o comportamento enamorado.
 #
 # Não se esqueça de executar este arquivo do diretório raiz do Duckievillage (p.ex.):
-#   cd ~/MAC0318/duckievillage
-#   conda activate duckietown
-#   python3 assignments/braitenberg/braitenberg.py
+#   cd ~/duckievillage
+#   source bin/activate 
+#   python3 assignments/manual/manual.py
 #
 # Instruções:
 #  0. Preencha o cabeçalho acima
 #  1. Assegure-se que o código submetido é o correto e funcionando. Se seu código não roda, você receberá nota 0 na atividade.
 #  2. Submeta este arquivo no e-disciplinas.
-#  3. Coloque esse arquivo no seu repositório pessoal (sugestão: fazendo um `fork` do repositório no gitlab). Você usará sua solução como base em outras atividades futuras.
+
 
 import sys
 import pyglet

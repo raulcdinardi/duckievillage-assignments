@@ -74,7 +74,8 @@ Sua primeira tarefa nesta atividade é modificar o arquivo [braitenberg.py](./br
 Submeta sua solução (o arquivo [braitenberg.py](./braitenberg.py)) via e-disciplinas. Lembre-se que para acessar o simulador você deve antes ativar o ambiente:
 
 ```bash
-conda activate duckietown
+cd ~/duckievillage
+source bin/activate 
 ```
 
 Com isso pronto, você deve seguir para implementar no robô duckiebot. Para isso, siga as instruções em sala. 
