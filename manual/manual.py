@@ -15,15 +15,14 @@
 #  - Escrever um agente controlado pelo teclado no simulador.
 #
 # Não se esqueça de executar este arquivo do diretório raiz do Duckievillage (p.ex.):
-#   cd ~/MAC0318/duckievillage
-#   conda activate duckietown
+#   cd ~/duckievillage
+#   source bin/activate 
 #   python3 assignments/manual/manual.py
 #
 # Instruções:
 #  0. Preencha o cabeçalho acima
 #  1. Assegure-se que o código submetido é o correto e funcionando. Se seu código não roda, você receberá nota 0 na atividade.
 #  2. Submeta este arquivo no e-disciplinas.
-#  3. Coloque esse arquivo no seu repositório pessoal (sugestão: fazendo um `fork` do repositório no gitlab). Você usará sua solução como base em outras atividades futuras.
 
 import sys
 import pyglet
@@ -52,14 +51,19 @@ class Agent:
 
         # The key_handler object handles keyboard events. It's basically a map indexed by Pyglet
         # keys with values True if the key is being held, or False otherwise.
+        if self.key_handler[key.W]:
+            # Set the values of pwm_left and pwm_right to make your robot move forward
+            # at a reasonable speed (perhaps add acceleration/deacceleration)
+            print('Move Forward!')
+        if self.key_handler[key.A]:
+            # Set the values of pwm_left and pwm_right to make your robot turn left
+            print('Turn Left!')
+        if self.key_handler[key.S]:
+            # Set the values of pwm_left and pwm_right to make your robot move backward
+            print('Move sBackward!')
         if self.key_handler[key.D]:
-            print('D!')
-        if self.key_handler[key.U]:
-            print('U!')
-        if self.key_handler[key.C]:
-            print('C!')
-        if self.key_handler[key.K]:
-            print('K!')
+            # Set the values of pwm_left and pwm_right to make your robot turn right
+            print('Turn Right!')
 
         # At each step, the environment may (or may not) change given your actions. Function step takes
         # as parameter the two motor powers as action and returns an observation (what the robot is
