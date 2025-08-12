@@ -1,17 +1,18 @@
 # Atividade - Direção manual
 
 Nesta atividade, apresentaremos o básico do ambiente de simulação de robôs autônomos que usaremos durante a disciplina. 
-Vamos usar uma versão modificada do simulador [Duckietown](https://github.com/duckietown/gym-duckietown/), que
-chamaremos de [Duckievillage](https://gitlab.uspdigital.usp.br/mac0318-2021/duckievillage). 
+Vamos usar uma versão modificada do simulador [Duckietown](https://github.com/denismaua/gym-duckietown), que
+chamaremos de [Duckievillage](https://github.com/denismaua/duckievillage). 
 O simulador reproduz o comportamento do duckiebot, ou seja, descreve o funcionamento de um robô de direção diferencial com duas rodas controladas por motores de conrrente contínua através da tensão elétrica aplicada em cada motor.
 Para familiarizar-se com a estrutura de um agente do simulador, você deverá construir um sistema de controle manual do robô a partir das teclas do seu teclado.
 
 ## Pré-requisito
 
-Vamos assumir que você instalou o simulador e clonou o projeto de atividades executando o arquivo [install.sh](../../install.sh) do projeto [Duckievillage](https://gitlab.uspdigital.usp.br/mac0318-2021/duckievillage). Antes de realizar cada atividade com o simulador, lembre-se de ativar o ambiente do Anaconda:
+Vamos assumir que você instalou o simulador e clonou o projeto de atividades. Antes de realizar cada atividade com o simulador, lembre-se de ativar o ambiente:
 
 ```bash
-conda activate duckietown
+source ~/duckievillage/bin/activate
+cd duckievillage/assignments/manual
 ```
 
 ## Controle manual no simulador
@@ -38,7 +39,7 @@ env = create_env(
 )
 ```
 
-O arquivo [manual.py](./manual.py) é comentado com os detalhes sobre o restante das operações necessárias para inciar o simulador. 
+O arquivo [manual.py](./manual.py) é comentado com os detalhes sobre o restante das operações necessárias para iniciar o simulador. 
 Você pode inspecionar o código, mas não será necessário entender o funcionamenteo do simulador para as atividades da disciplina (vamos focar apenas no funcionamento do robô). 
 O comportamento do robô é implementado na função `send_commands`, que é chamada periodicamente simulando a latência entre observação e processamento do robô real.
 A função recebe um valor `dt` indicando o tempo decorrido desde a última chamada e deve chamar a função `self.env.step` para enviar comandos aos atuadores, isto é, aos motores esquerdo e direito. 
@@ -52,7 +53,7 @@ Quando estiver satisfeito com o resultado, submeta o arquivo `manual.py` no e-di
 
 Depois siga as instruções em sala para dirigir o robô real usando o comando
 
-```
+```bash
 dts duckiebot keyboard_control NOME_ROBO
 ```
 
