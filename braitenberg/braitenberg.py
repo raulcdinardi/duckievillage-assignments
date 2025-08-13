@@ -17,7 +17,7 @@
 # Não se esqueça de executar este arquivo do diretório raiz do Duckievillage (p.ex.):
 #   cd ~/duckievillage
 #   source bin/activate 
-#   python3 assignments/manual/manual.py
+#   python3 assignments/manual/braitenberg.py
 #
 # Instruções:
 #  0. Preencha o cabeçalho acima
