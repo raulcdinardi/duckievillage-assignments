@@ -17,8 +17,8 @@
 #  agents.
 #
 # Don't forget to run this file from the Duckievillage root directory path (example):
-#   cd ~/MAC0318/duckievillage
-#   conda activate duckietown
+#   cd ~/duckievillage
+#   source bin/activate 
 #   python3 assignments/control/openloop/agents.py
 #
 # Submission instructions:
@@ -66,8 +66,8 @@ class Agent:
 
     def get_pwm_control(self, v: float, w: float)-> (float, float):
         ''' Takes velocity v and angle w and returns left and right power to motors.'''
-        l = 0
-        r = 0
+        l = (0.0525 - 0.00061224489)*(v-w)*(0.102/2)/0.0318
+        r = (0.0525 + 0.00061224489)*(v+w)*(0.102/2)/0.0318
         return l, r
 
     def send_commands(self, dt):
@@ -88,7 +88,7 @@ class SquareAgent(Agent):
     def start(self):
         super().start()
         # Initial time we give for the robot when it starts moving. Change as needed.
-        self.time = 1
+        self.time = 10
 
     def send_commands(self, dt):
         ''' Agent control loop '''
@@ -99,7 +99,14 @@ class SquareAgent(Agent):
         pwm_left, pwm_right = 0, 0
         if self.time > 0:
             self.time -= dt
-            v, w = 0.5, 0.0
+            if self.time < 02.5:
+                v, w = 2, 0.0
+            elif self.time < 5:
+                v, w = 2, 0
+            elif self.time < 07.5:
+                v, w = 2, 0
+            elif self.time < 10:
+                v, w = 2, 0
             pwm_left, pwm_right = self.get_pwm_control(v, w)
         elif self.running:
             self.running = False
@@ -107,6 +114,7 @@ class SquareAgent(Agent):
 
         self.env.step(pwm_left, pwm_right)
         self.env.render()
+
 
 class CircleAgent(Agent):
     def __init__(self, env):
@@ -180,7 +188,7 @@ def main():
         std_l = 1e-7,
         std_r = 1e-7,
         seed = 101,
-        map_name = './maps/grassy_road.yaml',
+        map_name = './maps/grassy_road',
         draw_curve = False,
         draw_bbox = False,
         domain_rand = False,
@@ -189,9 +197,9 @@ def main():
         distortion = False,
         top_down = False,
         cam_height = 10,
-        is_external_map = True,
+        #is_external_map = True,
         randomize_maps_on_reset = False,
-        enable_sun = True,
+        #enable_sun = True,
     )
 
     angle = env.unwrapped.cam_angle[0]

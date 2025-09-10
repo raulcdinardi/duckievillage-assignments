@@ -12,8 +12,8 @@
 #  - Empirically estimate parameters K_m and K_t
 #
 # Don't forget to run this file from the Duckievillage root directory path (example):
-#   cd ~/MAC0318/duckievillage
-#   conda activate duckietown
+#   cd ~/duckievillage
+#   source bin/activate 
 #   python3 assignments/control/model/agent.py
 #
 # Submission instructions:
@@ -52,9 +52,8 @@ class Agent:
         self.baseline = 0.102 # [m]
 
         # Motor constants
-        self.motor_gain = 0.01 # K_m -- you should modify this value
-        self.motor_trim = 0.0  # K_t -- you should modify this value
-
+        self.motor_gain = 0.05 / 20 * 21 # K_m -- you should modify this value
+        self.motor_trim = self.motor_gain / 85.75  # K_t -- you should modify this value
         key_handler = key.KeyStateHandler()
         environment.unwrapped.window.push_handlers(key_handler)
         self.key_handler = key_handler
@@ -63,6 +62,7 @@ class Agent:
         ''' Takes velocity v and angle w and returns left and right power to motors.'''
         V_l = (self.motor_gain - self.motor_trim)*(v-w*self.baseline/2)/self.radius
         V_r = (self.motor_gain + self.motor_trim)*(v+w*self.baseline/2)/self.radius
+        print("")
         return V_l, V_r
 
     def send_commands(self, dt):
@@ -126,7 +126,7 @@ def main():
         std_l = 1e-7,
         std_r = 1e-7,
         seed = 101,
-        map_name = './maps/grassy_road.yaml',
+        map_name = './maps/grassy_road',
         draw_curve = False,
         draw_bbox = False,
         domain_rand = False,
@@ -135,9 +135,9 @@ def main():
         distortion = False,
         top_down = False,
         cam_height = 10,
-        is_external_map = True,
+        #is_external_map = True,
         randomize_maps_on_reset = False,
-        enable_sun = True,
+        #enable_sun = True,
     )
 
     angle = env.unwrapped.cam_angle[0]
