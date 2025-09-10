@@ -4,7 +4,7 @@
 # Se o trabalho for feito em grupo, coloque os nomes de 
 # todos os integrantes (copie e cole as linhas abaixo)
 #
-# Nome:
+# Nome: Raul Cavalcante Dinardi
 # NUSP:
 #
 # ---
@@ -38,13 +38,13 @@ class Agent:
         """ Initializes agent """
         self.env = environment
         # Color segmentation hyperspace
-        self.lower_hsv = np.array([5, 70, 90])
+        self.lower_hsv = np.array([18, 115, 150])
         self.upper_hsv = np.array([40, 255, 255])
         # Acquire image for initializing activation matrices
         img = self.env.front()
         img_shape = img.shape[0], img.shape[1]
         # Normalization constant of sensor aggregation
-        limit = img.shape[0]*img.shape[1]/4
+        self.limit = img.shape[0]*img.shape[1]/4
         self.left_motor_matrix = np.zeros(shape=img_shape, dtype="float32")
         self.right_motor_matrix = np.zeros(shape=img_shape, dtype="float32")
         # TODO! Replace with your code
@@ -75,8 +75,8 @@ class Agent:
         R = rescale(R, 0, self.limit)
         # Tweak with the constants below to get to change velocity or stabilize movements
         # Recall that pwm sets wheel torque, and is capped to be in [-1,1]
-        gain = 5.0
-        const = 0.2 # power under null activation - this ensures the robot does not halt
+        gain = -3
+        const = 0.5 # power under null activation - this ensures the robot does not halt
         pwm_left = const + R * gain
         pwm_right = const + L * gain
         # print('>', L, R, pwm_left, pwm_right) # uncomment for debugging
@@ -105,7 +105,7 @@ def main():
       top_down = False,
       cam_height = 10,
       is_external_map = True,
-      enable_lightsensor = False
+      enable_lightsensor = False,
     )
     for o in env.objects: o.scale = 0.085
 
