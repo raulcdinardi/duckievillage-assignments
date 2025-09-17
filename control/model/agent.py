@@ -62,7 +62,6 @@ class Agent:
         ''' Takes velocity v and angle w and returns left and right power to motors.'''
         V_l = (self.motor_gain - self.motor_trim)*(v-w*self.baseline/2)/self.radius
         V_r = (self.motor_gain + self.motor_trim)*(v+w*self.baseline/2)/self.radius
-        print("")
         return V_l, V_r
 
     def send_commands(self, dt):
