@@ -1,8 +1,8 @@
 # MAC0318 Intro to Robotics
 # Please fill-in the fields below with your info
 #
-# Name:
-# NUSP:
+# Name: Raul Cavalcante Dinardi
+# NUSP: 1548631
 #
 # ---
 #

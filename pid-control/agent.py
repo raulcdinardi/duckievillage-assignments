@@ -1,8 +1,8 @@
 # MAC0318 Intro to Robotics
 # Please fill-in the fields below with your info
 #
-# Name:
-# NUSP:
+# Name: Raul Cavalcante Dinardi
+# NUSP: 15486341
 #
 # ---
 #
@@ -48,6 +48,9 @@ class Agent:
         environment.unwrapped.window.push_handlers(key_handler)
         self.velocity = 0.0 # robot's logitudinal velocity
         self.rotation = 0.0 # robot's angular velocity
+
+        self.Ei = 0
+        self.old_y = None
         self.key_handler = key_handler
 
     def preprocess(self) -> float:
@@ -69,18 +72,38 @@ class Agent:
             self.velocity = 0.2
         if self.key_handler[key.A]:
             self.rotation += 0.5
+            print(self.rotation)
         if self.key_handler[key.S]:
             self.velocity = 0.0
+        
         if self.key_handler[key.D]:
             self.rotation = -0.5
+            print(self.rotation)
         # End of remote control snippet.
+        ### PID
 
-        pwm_left, pwm_right = self.get_pwm_control(self.velocity, self.rotation)
 
         # Target value for lane-following.
+
         y = self.preprocess()
+        if self.old_y != None:
+            Ed = (y - self.old_y) / dt
+            print(dt, Ed)
+        else:
+            Ed = 0
+        self.Ei += y
         
+        print(f"P:{y}    I:{self.Ei}    D:{Ed}")
+        p = 4 # constante para controle proporional de rotação
+        i = 0.01 # constante para controle integrativo de rotação
+        d = 1 # constante para controle derivativo de rotação
+
+        self.velocity = 0.2
+        self.rotation = - (p*y + i*self.Ei + d*Ed)
+        self.old_y = y
         # print(y) # uncomment this for debugging
+
+        pwm_left, pwm_right = self.get_pwm_control(self.velocity, self.rotation)
 
         self.env.step(pwm_left, pwm_right) # send commands to motor
         self.env.render() # simulate environment
