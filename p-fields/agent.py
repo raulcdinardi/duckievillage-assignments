@@ -135,10 +135,13 @@ class Agent:
             pwm_left -= 0.5; pwm_right -= 0.5
         if self.key_handler[key.D]:
             pwm_left += 0.25; pwm_right -= 0.25
-
+        # current position
         p = self.env.get_position()
+        # target position
         q = self.preprocess(p, mr_duckie_pos(), self.env.poly_map.polygons())
-
+        # robot's heading
+        a = self.env.cur_angle
+        # TODO: compute velocity and rotation using PID controller
         pwm_left, pwm_right = self.get_pwm_control(self.velocity, self.rotation)
         self.env.step(pwm_left, pwm_right)
         self.env.render()
