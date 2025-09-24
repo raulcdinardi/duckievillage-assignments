@@ -74,9 +74,9 @@ def dist_obj(p: np.ndarray, o: list) -> (float, np.ndarray):
         a = b
     return m, np.array(mo)
 
-def heading_vec(p: np.ndarray, o: list) -> (float):
-    dist, point = dist_obj(p, o)
-    heading_vec = (p - point)/dist # vetor unitario a direcao do objeto
+def heading_vec(p: np.ndarray, o: np.ndarray) -> (float):
+    heading_vec = p - o 
+    heading_vec = heading_vec/np.linalg.norm(heading_vec)
     return heading_vec
 
 class Agent:
@@ -102,10 +102,12 @@ class Agent:
         self.K_v = 0
         self.K_w = 0
 
+        self.erro_cumulativo = 0
+        self.erro_anterior = None
+
         key_handler = key.KeyStateHandler()
         environment.unwrapped.window.push_handlers(key_handler)
         self.key_handler = key_handler
-
     def get_pwm_control(self, v: float, w: float)-> (float, float):
         ''' Takes velocity v and angle w and returns left and right power to motors.'''
         V_l = (self.motor_gain - self.motor_trim)*(v-w*self.baseline)/self.radius
@@ -114,28 +116,40 @@ class Agent:
 
     def F_att(self, p: np.ndarray, g: np.ndarray) -> float:
         '''Returns the attraction force applied at position p from goal g.'''
-        return (p-g)**2
+        return 1/np.linalg.norm(p-g)**2
         
     def F_rep(self, p: np.ndarray, o: list) -> float:
         '''Returns the repulsion force applied at position p from object o.'''
-        return -dist_obj(p,o)[1]**2
+        return -1/dist_obj(p,o)[0]**3
 
     def preprocess(self, p: np.ndarray, g: np.ndarray, P: list) -> np.ndarray:
-        print(p,g)
-        vec = self.F_att(p,g) 
+        vec = self.F_att(p,g) * heading_vec(p, g) * 1.5
         for o in P:
-            vec += self.F_rep(p, o)*heading_vec(p, o) 
+            vec += self.F_rep(p, o)*heading_vec(p, dist_obj(p,o)[1]) *0.004
 
         '''
         Takes the bot's current position p, a goal position g, and a list of polygons P. The
         function should then compute the force and return the resulting point for the bot to
         follow.
         '''
-        print(p,vec/100, p+vec)
-        return p+vec/100
+        return p+vec
+    def pid(self, erro):
+        kEp = 1000
+        kEd = -300
+        kEi = -0
 
-    def follow_point():
-        pass
+        erro_der = 0
+        if self.erro_anterior != None:
+            self.erro_anterior = erro
+        else:
+            try:
+                erro_der = erro - self.erro_anterior
+            except:
+                pass
+        
+        self.erro_cumulativo = 0
+
+        return kEp*erro + kEd*erro_der + kEi*self.erro_cumulativo
 
     def send_commands(self, dt: float):
         ''' Agent control loop '''
@@ -149,23 +163,31 @@ class Agent:
             pwm_left -= 0.5; pwm_right -= 0.5
         if self.key_handler[key.D]:
             pwm_left += 0.25; pwm_right -= 0.25
-        print(f"angle : {self.env.cur_angle}")
-        pose_angle = self.env.cur_angle
+        # current 
         p = self.env.get_position()
+        # target position
         q = self.preprocess(p, mr_duckie_pos(), self.env.poly_map.polygons())
-        vetor_direcao =  np.array([np.sin(pose_angle), np.cos(pose_angle)], float)
-        vetor_objeivo = p-q
-        print(f"vetor objetivo: {vetor_objeivo}")
+        #q = np.array([2,2])
+        # robot's heading
+        a = self.env.cur_angle
+        # TODO: compute velocity and rotation using PID controller
 
-        direcao = np.cross(vetor_direcao, vetor_objeivo)
-        if direcao > 0:
-            print("direita")
-        else:
-            print("esquerda")
 
-        print(p,q)
 
+
+        direcao = np.array([np.sin(a+ np.pi), np.cos(a + np.pi)])
+        direcao_q = p-q
+
+        direcao = direcao/np.linalg.norm(direcao) / 100
+        direcao_q = direcao_q/np.linalg.norm(direcao) / 100
+
+        #self.rotation = 1
+        erro = np.dot(direcao, direcao_q) 
+        self.velocity = 0.2
+        self.rotation = self.pid(erro)
+        print(f"p: {p} ; q: {q} ; a: {a}, erro: {erro}, giro: {self.rotation}")
         pwm_left, pwm_right = self.get_pwm_control(self.velocity, self.rotation)
+
         self.env.step(pwm_left, pwm_right)
         self.env.render()
 
